@@ -30,7 +30,6 @@ export class OrderManagement {
         // Validate the order before adding
         this.validator.validate(order);
         this.orders.push(order);
-
       
 }
 
