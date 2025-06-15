@@ -1,4 +1,5 @@
-import { OrderManagement, FinancialCalculator, PremuimOrderManagement, Validdator } from "app";
+import { OrderManagement, FinancialCalculator, Validdator } from "./app";
+import logger from "./util/logger";
 
 const orders = [
   { id: 1, item: "Sponge", price: 15 },
@@ -14,30 +15,30 @@ for(const order of orders) {
 
 
 
-// Adding a new order directly
+
 const newItem = "Marble";
 const newPrice = 22;
 
 OrderManager.addOrder(newItem, newPrice);
 
 
-console.log("Orders after adding a new order:", OrderManager.getOrders());
+logger.info("Orders after adding a new order: %o" , OrderManager.getOrders());
 
 // Calculate Total Revenue directly
-console.log("Total Revenue:", OrderManager.getrevenue());
+logger.info("Total Revenue:" + OrderManager.getrevenue());
 
 
 
 
 // Calculate Average Buy Power directly
 
-console.log("Average Buy Power:", OrderManager.getAverageByPower());
+logger.info("Average Buy Power:" + OrderManager.getAverageByPower());
 
 // Fetching an order directly
 const fetchid = 2;
-console.log("Order with ID 2:", OrderManager.fetchOrderbyid(fetchid));
+logger.info("Order with ID 2: %o" , OrderManager.fetchOrderbyid(fetchid));
 
 // Attempt to fetch a non-existent order
 const nonExistentId = 10;
 const nonExistentOrder = OrderManager.fetchOrderbyid(nonExistentId);
-console.log("Order with ID 10 (non-existent):", nonExistentOrder);
+logger.info("Order with ID 10 (non-existent):" + nonExistentOrder);

@@ -1,5 +1,8 @@
 //SOLID PRINCIPLES
 
+import { ExceptionHandler } from "winston";
+import logger from "./util/logger";
+
 //S - Single Responsibility Principle (SRP)
 //O - open closed principle (OCP):
 //L - Liskov Substitution Principle (LSP)
@@ -25,16 +28,27 @@ export class OrderManagement {
         return this.orders;
     }
     addOrder(item: string, price:number) {
+        try {
         const order: Order = {
             id: this.orders.length + 1,item, price};
         // Validate the order before adding
         this.validator.validate(order);
         this.orders.push(order);
-      
+
+        }
+        catch (error: any) {
+            throw new Error(`[OrderManagement] Error adding order:` + error.message);
 }
+    }
 
 fetchOrderbyid(id:number){
-    return this.getOrders().find(order => order.id === id) 
+    //fetch order by id
+    const order = this.getOrders().find(order => order.id === id) || null;
+    if (!order) {
+        logger.warn(`Order with ID ${id} not found`);
+    }
+
+    return order;
 
 }
 getrevenue() {
@@ -90,8 +104,11 @@ validate(order: Order): void {
         }
              validate(order: Order): void {
             if (!ItemValidator.possibleItems.includes(order.item)) {
+               
                 throw new Error(`Invalid item. Must be one of: ${ItemValidator.possibleItems.join(", ")}`);
             }
+        
+
 
          }
         }
@@ -99,6 +116,7 @@ validate(order: Order): void {
         export class PriceValidator implements Ivalidator {
             validate(order: Order): void {
                 if (order.price <= 0) {
+                     logger.error(`Price is negative: ${order.item}`);
                     throw new Error("Price must be greater than zero");
                 }
             }
