@@ -41,5 +41,5 @@ if (isDev) {
         level: 'debug',
     }))
 };
-    
+    console.log("Logger initialized")
 export default logger;
