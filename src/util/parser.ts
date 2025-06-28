@@ -6,10 +6,12 @@ export async function readCSV(filePath: string,includeHeader: Boolean=false): Pr
     try {
         const fileContent = await fs.readFile(filePath, 'utf-8');
         return parse(fileContent, {
+       
             skip_empty_lines: true
         });
     } catch (error) {
-        throw new Error(`Error reading CSV file: ${error}`);
+        throw new Error(`Error reading CSV file:alal ${error}`);
+            
     }
 }
 
