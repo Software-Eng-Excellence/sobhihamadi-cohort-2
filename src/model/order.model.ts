@@ -1,6 +1,6 @@
 import { Item } from "./Item.model";
 
-interface Order{
+export interface Order{
     getId(): string;
     getItem(): Item
     getQuantity(): number;
