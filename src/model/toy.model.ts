@@ -17,15 +17,14 @@ export class Toy implements Item {
 
 
     constructor(
-        orderID: number,
+        
         type: string,
         ageGroup: string,
         brand: string,
         material: string,
         batteryRequired: boolean,
         educational: boolean,
-        price: number,
-        quantity: number
+
     ) {
    
         this.type = type;

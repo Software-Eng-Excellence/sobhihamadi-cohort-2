@@ -18,7 +18,7 @@ export class Book implements Item {
  
 
     constructor(
-        orderId: string,
+        
         bookTitle: string,
         author: string,
         genre: string,
@@ -27,8 +27,7 @@ export class Book implements Item {
         publisher: string,
         specialEdition: string,
         packaging: string,
-        price: number,
-        quantity: number
+
     ) {
         this.bookTitle = bookTitle;
         this.author = author;
