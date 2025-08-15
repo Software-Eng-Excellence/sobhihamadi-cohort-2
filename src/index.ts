@@ -1,21 +1,52 @@
-import logger from "./util/logger";
-import { readCSV } from './util/parsers/csvparser';
-import { readJSON } from './util/parsers/jsonparser';
-import { readXML } from './util/parsers/xmlparser';
+import { ToyBuilder } from "./model/builders/toy.builder";
+import { bookBuilder } from "./model/builders/book.builder";
+
+import { cakebuilder } from "./model/builders/cake.builder";
 
 async function main() {
-    // CSV data
-    const csvData = await readCSV("../data/cake orders.csv");
-    csvData.forEach((row: any) => logger.info(`CSV data: ${row}`)); 
+    //  ToyBuilder 
+    const newtoy = new ToyBuilder()
+        .setType("Action Figure")
+        .setAgeGroup("6-12")
+        .setBrand("ToyBrand")
+        .setMaterial("Plastic")
+        .setBatteryRequired(false)
+        .setEducational(true);
+    const toy = newtoy.build();
 
-    // JSON data
-    const jsonData = await readJSON("./src/data/book orders.json");
-    jsonData.forEach((row: object) => logger.info(`JSON data: ${JSON.stringify(row)}`));
 
-    // XML data
-    const xmlData = await readXML("./src/data/toy orders.xml");
-    const rows = xmlData.data.row;  // assuming rows is always an array
-    rows.forEach((row: object) => logger.info(`XML data: ${JSON.stringify(row)}`));
-}
+// BookBuilder
 
+
+    const newbook = new bookBuilder()
+        .setBookTitle("The Great Adventure")
+        .setAuthor("John Doe")
+        .setGenre("Adventure")  
+        .setFormat("Hardcover")
+        .setLanguage("English")
+        .setPublisher("Adventure Press")
+        .setSpecialEdition("Limited Edition")
+        .setPackaging("Gift Wrap");
+    const book = newbook.build();
+    console.log("Book created successfully:", book);
+
+
+// const newCake = new cakebuilder()
+//     .settype("Chocolate")
+//     .setflavor("Dark Chocolate")
+//     .setfilling("Chocolate Ganache")
+//     .setsize(10)
+//     .setlayers(3)
+//     .setfrostingType("Buttercream")
+//     .setfrostingFlavor("Vanilla")
+//     .setdecorationType("Sprinkles")
+//     .setdecorationColor("Rainbow")
+//     .setcustomMessage("Happy Birthday!")
+//     .setshape("Round")
+//     .setallergies("None")
+//     .setspecialIngredients("Organic Ingredients")
+//     .setpackagingType("Eco-friendly Box");
+
+// const cake = newCake.build();
+console.log("Cake created successfully:", toy);};
 main();
