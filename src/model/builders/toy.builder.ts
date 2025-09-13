@@ -9,6 +9,10 @@ export class ToyBuilder {
     private _batteryRequired!: boolean;
     private _educational!: boolean;
 
+    public static newBuilder(): ToyBuilder {
+        return new ToyBuilder();
+    }
+
     setType(type: string): ToyBuilder {
         this._type = type;
         return this;

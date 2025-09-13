@@ -19,6 +19,10 @@ export class cakebuilder {
     private _specialIngredients!: string;
     private _packagingType!: string;
 
+    public static newbuilder(): cakebuilder {
+        return new cakebuilder();
+    }
+
     settype(type: string): cakebuilder {
         this._type = type;
         return this;
@@ -75,43 +79,46 @@ export class cakebuilder {
         this._packagingType = packagingType;
         return this;
     }
-    build(): Cake{
-        const requiredFields = [
-            this._type,
-            this._flavor,
-            this._filling,
-            this._size,
-            this._layers,
-            this._frostingType,
-            this._frostingFlavor,
-            this._decorationType,
-            this._decorationColor,
-            this._customMessage,
-            this._shape,
-            this._allergies,
-            this._specialIngredients,
-            this._packagingType
-        ];
-        for (const field of requiredFields) {
-            if (!field) {
-                logger.error('Required field is missing');
-                throw new Error('Required field is missing');
-            }}
-        return new Cake(
-            this._type,
-            this._flavor,
-            this._filling,
-            this._size,
-            this._layers,   
-            this._frostingType,
-            this._frostingFlavor,
-            this._decorationType,
-            this._decorationColor,
-            this._customMessage,
-            this._shape,
-            this._allergies,
-            this._specialIngredients,
-            this._packagingType
-        );
+    build(): Cake {
+    const requiredFields = [
+        this._type,
+        this._flavor,
+        this._filling,
+        this._size,
+        this._layers,
+        this._frostingType,
+        this._frostingFlavor,
+        this._decorationType,
+        this._decorationColor,
+        this._customMessage,
+        this._shape,
+        this._allergies,
+        this._specialIngredients,
+        this._packagingType
+    ];
+    for (const field of requiredFields) {
+        if (field === undefined || field === null) {
+            logger.error('Required field is missing');
+            throw new Error('Required field is missing');
+        }
     }
+    return new Cake(
+        this._type,
+        this._flavor,
+        this._filling,
+        this._size,
+        this._layers,   
+        this._frostingType,
+        this._frostingFlavor,
+        this._decorationType,
+        this._decorationColor,
+        this._customMessage,
+        this._shape,
+        this._allergies,
+        this._specialIngredients,
+        this._packagingType
+    );
+}
+
+    
 };

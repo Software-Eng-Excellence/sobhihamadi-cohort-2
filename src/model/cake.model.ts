@@ -1,7 +1,7 @@
-import { Item, ItemCategory } from "./Item.model";
+import { IItem, ItemCategory } from "./IItem";
 
 
-export class Cake implements Item {
+export class Cake implements IItem {
     
     getCategory(): ItemCategory {
         return ItemCategory.Cake;

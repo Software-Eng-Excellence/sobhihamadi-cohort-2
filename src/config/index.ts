@@ -4,5 +4,5 @@ dotenv.config({path:path.join(__dirname,'../../.env')}); // Load environment var
 
 export default  {
   logDir: process.env.LOG_DIR || './logs', // Directory for log files
-  isDev: process.env.NODE_ENV == 'development', // Check if the environment is development
+  isDev: true // Check if the environment is development
 }
