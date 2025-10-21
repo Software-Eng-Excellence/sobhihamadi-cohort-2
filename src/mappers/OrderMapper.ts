@@ -1,14 +1,15 @@
 import { IMapper } from "./IMapper";
-import { Order } from "../model/Order.model";
-import { OrderBuilder } from "../model/builders/Order.builder";
-import { IItem } from "../model/IItem";
+import { IdentifierOrderItem, Order } from "../model/order.model";
+import { identifierOrderItemBuilder, OrderBuilder } from "../model/builders/Order.builder";
+import { identifierItem, IItem } from "../model/IItem";
+import { IOrder } from "model/IOrder";
 
-export class CSVOrderMapper implements IMapper <string[], Order>{
+export class CSVOrderMapper implements IMapper <string[], IOrder>{
     constructor(private itemMapper: IMapper<string[], IItem>) {
 
     }
   
-    map(data: string[]): Order {
+    map(data: string[]): IOrder {
           const item: IItem = this.itemMapper.map(data);
         return OrderBuilder.NewBuilder()
             .setId(data[0])
@@ -20,5 +21,52 @@ export class CSVOrderMapper implements IMapper <string[], Order>{
 
 
     }
-    
+    reverseMap(data: IOrder): string[] {
+        const itemData = this.itemMapper.reverseMap(data.getItem());
+        return [
+            data.getid(),
+            ...itemData,
+            data.getPrice().toString(),
+            data.getQuantity().toString()
+        ];
+
+    }}
+
+
+export interface ISQLITEOrderData {
+    id: string;
+    item: string;
+    quantity: number;
+    item_Category: string;
+    price: number;
+}
+
+export class SQLITEOrderMapper implements IMapper<{data: ISQLITEOrderData, item: identifierItem}, IdentifierOrderItem> {
+    map({data, item}: {data: ISQLITEOrderData, item: identifierItem}): IdentifierOrderItem {
+      const order = OrderBuilder.NewBuilder()
+        .setId(data.id)
+        .setPrice(data.price)
+        .setQuantity(data.quantity)
+        .setItem(item)
+        .build();
+        return identifierOrderItemBuilder.NewBuilder()
+        .setOrder(order)
+        .setItem(item)
+        .build();
     }
+
+    reverseMap(item: IdentifierOrderItem): {data: ISQLITEOrderData, item: identifierItem} {
+        return {
+            data: {
+                id: item.getid(),
+                item: item.getItem().getid(),
+                quantity: item.getQuantity(),
+                item_Category: item.getItem().getCategory(),
+                price: item.getPrice()
+            },
+            item: item.getItem() as identifierItem
+        };
+    }
+}
+  
+

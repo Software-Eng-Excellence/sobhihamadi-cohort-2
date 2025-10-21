@@ -4,6 +4,9 @@ import { bookBuilder } from "../model/builders/book.builder";
 
 
 export class JsonBookMapper implements IMapper<string[], Book> {
+    reverseMap(data: Book): string[] {
+        throw new Error("Method not implemented.");
+    }
     [x: string]: any;  
 
     map(data: string[]): Book {

@@ -1,4 +1,5 @@
-import { IItem } from "./IItem";
+import { OrderBuilder } from "./builders/Order.builder";
+import { identifierItem, IItem } from "./IItem";
 import { IOrder } from "./IOrder";
 
 export class Order implements IOrder {
@@ -13,7 +14,7 @@ export class Order implements IOrder {
         this._quantity = quantity;
         this._price = price;
     }
-    getId(): string {
+    getid(): string {
         return this._id;
     }
     getItem(): IItem {
@@ -25,6 +26,29 @@ export class Order implements IOrder {
     getPrice(): number {
         return this._price;
     }
+  
+
+}
+
+export class IdentifierOrderItem  implements IdentifierOrderItem {
+    constructor(private id: string, private IdentifierItem: identifierItem,private quantity: number, private price: number) {
+ 
+    }
+    getid(): string {
+        return this.id;
+    }
+    getQuantity(): number {
+        return this.quantity;
+    }
 
 
+    getItem(): identifierItem {
+        return this.IdentifierItem;
+
+    }
+
+    getPrice(): number {
+        return this.price;
+    }
+   
 }
