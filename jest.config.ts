@@ -11,9 +11,9 @@ const config: Config = {
     coverageThreshold: {
         global: {
           functions: 85,
-          statements: 75
+          statements: 75,
 
 
-}}
+},},
 }
 export default config;

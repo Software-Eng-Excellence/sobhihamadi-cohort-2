@@ -1,5 +1,5 @@
 import logger from '../../util/logger';
-import { Toy } from '../../model/toy.model';
+import { IdentifierToy, Toy } from '../../model/toy.model';
 
 export class ToyBuilder {
     private _type!: string;
@@ -62,3 +62,40 @@ export class ToyBuilder {
         );
     }
 };
+
+export class IdentifierToyBuilder {
+    private id!: string;
+    private toy!: Toy;
+
+    public static newBuilder(): IdentifierToyBuilder {
+        return new IdentifierToyBuilder();
+    }
+    setid(id: string): IdentifierToyBuilder {
+           if (!id) {
+            logger.error('ID cannot be empty');
+            throw new Error('ID cannot be empty');
+        }
+        this.id = id;
+        return this;
+    }
+    setToy(toy: Toy): IdentifierToyBuilder {
+        this.toy = toy;
+        return this;
+    }   
+    build(): IdentifierToy {
+        if (!this.id || !this.toy) {
+            logger.error('Identifier is missing');
+            throw new Error('Identifier is missing');
+        }
+        return new IdentifierToy(
+            this.id,
+            this.toy.getType(),
+            this.toy.getAgeGroup(),
+            this.toy.getBrand(),
+            this.toy.getMaterial(),
+            this.toy.getBatteryRequired(),
+            this.toy.getEducational()
+            
+        );
+    }
+}
