@@ -1,0 +1,104 @@
+openapi: 3.0.0
+info:
+  title: Analytics API
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/api
+paths:
+  /analytics/total-orders:
+    get:
+      tags: [analytics]
+      summary: Total number of orders
+      responses:
+        '200':
+          description: Total orders count
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TotalOrdersResponse'
+
+  /analytics/orders-by-item:
+    get:
+      tags: [analytics]
+      summary: Number of orders per item type
+      responses:
+        '200':
+          description: Counts per item type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrdersByItemResponse'
+
+  /analytics/total-revenue:
+    get:
+      tags: [analytics]
+      summary: Total revenue from all orders
+      responses:
+        '200':
+          description: Total revenue
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TotalRevenueResponse'
+
+  /analytics/revenue-by-item:
+    get:
+      tags: [analytics]
+      summary: Revenue breakdown by item type
+      responses:
+        '200':
+          description: Revenue per item type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RevenueByItemResponse'
+
+components:
+  schemas:
+    TotalOrdersResponse:
+      type: object
+      properties:
+        totalOrders:
+          type: integer
+          example: 128
+
+    OrdersByItemResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          itemType:
+            type: string
+            enum: [Cake, Book, Toy]
+            example: Cake
+          count:
+            type: integer
+            example: 42
+
+    TotalRevenueResponse:
+      type: object
+      properties:
+        currency:
+          type: string
+          example: USD
+        totalRevenue:
+          type: number
+          format: float
+          example: 15432.75
+
+    RevenueByItemResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          itemCategory:
+            type: string
+            enum: [Cake, Book, Toy]
+            example: Book
+          revenue:
+            type: number
+            format: float
+            example: 5230.50
+          currency:
+            type: string
+            example: USD
