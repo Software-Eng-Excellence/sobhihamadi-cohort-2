@@ -1,14 +1,16 @@
 openapi: 3.0.0
 info:
   title: Analytics API
+  description: API for business intelligence and analytics
   version: 1.0.0
 servers:
   - url: http://localhost:8080/api
+
 paths:
   /analytics/total-orders:
     get:
       tags: [analytics]
-      summary: Total number of orders
+      summary: Get total number of orders
       responses:
         '200':
           description: Total orders count
@@ -16,42 +18,85 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TotalOrdersResponse'
+        '500':
+          description: Internal server error
 
-  /analytics/orders-by-item:
+  /analytics/orders-by-category:
     get:
       tags: [analytics]
-      summary: Number of orders per item type
+      summary: Get orders count by category
       responses:
         '200':
-          description: Counts per item type
+          description: Orders breakdown by category
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OrdersByItemResponse'
+                $ref: '#/components/schemas/OrdersByCategoryResponse'
+        '500':
+          description: Internal server error
 
   /analytics/total-revenue:
     get:
       tags: [analytics]
-      summary: Total revenue from all orders
+      summary: Get total revenue
       responses:
         '200':
-          description: Total revenue
+          description: Total revenue across all orders
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/TotalRevenueResponse'
+        '500':
+          description: Internal server error
 
-  /analytics/revenue-by-item:
+  /analytics/revenue-by-category:
     get:
       tags: [analytics]
-      summary: Revenue breakdown by item type
+      summary: Get revenue breakdown by category
       responses:
         '200':
-          description: Revenue per item type
+          description: Revenue breakdown by category
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RevenueByItemResponse'
+                $ref: '#/components/schemas/RevenueByCategoryResponse'
+        '500':
+          description: Internal server error
+
+  /analytics/top-selling-items:
+    get:
+      tags: [analytics]
+      summary: Get top selling items
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: Top selling items by quantity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TopSellingItemsResponse'
+        '500':
+          description: Internal server error
+
+  /analytics/customer-metrics:
+    get:
+      tags: [analytics]
+      summary: Get customer behavior metrics
+      responses:
+        '200':
+          description: Customer metrics and analytics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerMetricsResponse'
+        '500':
+          description: Internal server error
 
 components:
   schemas:
@@ -61,44 +106,108 @@ components:
         totalOrders:
           type: integer
           example: 128
+        timePeriod:
+          type: string
+          example: "all-time"
 
-    OrdersByItemResponse:
-      type: array
-      items:
-        type: object
-        properties:
-          itemType:
-            type: string
-            enum: [Cake, Book, Toy]
-            example: Cake
-          count:
-            type: integer
-            example: 42
+    OrdersByCategoryResponse:
+      type: object
+      properties:
+        breakdown:
+          type: array
+          items:
+            type: object
+            properties:
+              category:
+                type: string
+                example: "Cake"
+              count:
+                type: integer
+                example: 42
+              percentage:
+                type: number
+                format: float
+                example: 32.8
 
     TotalRevenueResponse:
       type: object
       properties:
-        currency:
-          type: string
-          example: USD
         totalRevenue:
           type: number
           format: float
           example: 15432.75
+        currency:
+          type: string
+          example: "USD"
+        timePeriod:
+          type: string
+          example: "all-time"
 
-    RevenueByItemResponse:
-      type: array
-      items:
-        type: object
-        properties:
-          itemCategory:
-            type: string
-            enum: [Cake, Book, Toy]
-            example: Book
-          revenue:
-            type: number
-            format: float
-            example: 5230.50
-          currency:
-            type: string
-            example: USD
+    RevenueByCategoryResponse:
+      type: object
+      properties:
+        breakdown:
+          type: array
+          items:
+            type: object
+            properties:
+              category:
+                type: string
+                example: "Cake"
+              revenue:
+                type: number
+                format: float
+                example: 8420.50
+              percentage:
+                type: number
+                format: float
+                example: 54.6
+              currency:
+                type: string
+                example: "USD"
+
+    TopSellingItemsResponse:
+      type: object
+      properties:
+        period:
+          type: string
+          example: "all-time"
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              itemId:
+                type: string
+                example: "cake-123"
+              itemName:
+                type: string
+                example: "Chocolate Birthday Cake"
+              category:
+                type: string
+                example: "Cake"
+              quantitySold:
+                type: integer
+                example: 45
+              totalRevenue:
+                type: number
+                format: float
+                example: 2250.00
+
+    CustomerMetricsResponse:
+      type: object
+      properties:
+        totalCustomers:
+          type: integer
+          example: 89
+        averageOrderValue:
+          type: number
+          format: float
+          example: 125.50
+        repeatCustomerRate:
+          type: number
+          format: float
+          example: 42.5
+        newCustomersThisMonth:
+          type: integer
+          example: 15
