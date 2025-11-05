@@ -1,5 +1,6 @@
 import dotenv  from "dotenv";
 import path from "path";
+import { DBMode } from "../config/db_mode";
 dotenv.config({path:path.join(__dirname,'../../.env')}); // Load environment variables from .env file
 
 export default  {
@@ -19,4 +20,10 @@ sqlite:{
 postgres:{
   url: process.env.DATABASE_URL || 'postgresql://USER:PASSWORD@HOST:PORT/DB?sslmode=require',
 }
-}}
+},
+port: process.env.PORT ? parseInt(process.env.PORT) : 3000, // Server port
+host: process.env.HOST || 'localhost', // Server host
+
+
+DBMode:DBMode.SQLITE || DBMode.POSTGRES, // Database mode
+}

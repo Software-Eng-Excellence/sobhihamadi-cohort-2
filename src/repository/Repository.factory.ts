@@ -1,26 +1,22 @@
 import { ItemCategory } from "../model/IItem";
-import { IOrder } from "../model/IOrder";
+import { identifierOrderItem, IOrder } from "../model/IOrder";
 import { Initializable, IRepository } from "./IRepository";
 import { OrderRepository } from "./sqlite/Order.repository";
 import { CakeOrderRepository } from "./sqlite/CakeOrder.repository";
-import config from "../config";
-import { cakeOrderRepository } from "./file/CakeOrder.repository";
+
 import { CakeRepositoryPostgre } from "./PostgreSQL/CakeRepositoryP";
 import { BookRepositoryPostgre } from "./PostgreSQL/BookRepositoryP";
 import { ToyPostgreRepository } from "./PostgreSQL/ToyRepositoryP";
 import { BookOrderRepository } from "./sqlite/BookOrder.repository";
 import { ToyOrderRepository } from "./sqlite/ToyOrder.repository";
+import { DBMode } from "../config/db_mode";
 
-export enum DBMode{
-    CSV,
-    SQLITE,
-    POSTGRES
-}
+
 
 
 export  class RepositoryFactory {
-    public static async create(mode:DBMode,category:ItemCategory): Promise<IRepository<IOrder>>{
-         let repository: IRepository<IOrder> & Initializable;
+    public static async create(mode:DBMode,category:ItemCategory): Promise<IRepository<identifierOrderItem>>{
+         let repository: IRepository<identifierOrderItem> & Initializable;
         switch(mode){
              
              case DBMode.POSTGRES:{
@@ -66,13 +62,7 @@ export  class RepositoryFactory {
             
         }    
         case DBMode.CSV:{
-            switch(category){
-                case ItemCategory.Cake:
-                    return new cakeOrderRepository(config.storagePath.csv.cake);
-                
-                    default:
-                    throw new Error("Invalid category");
-                    }
+          throw new Error("file csv Mode  is deprecated");
                   
 
                 }

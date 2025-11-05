@@ -23,7 +23,7 @@ const consoleformat = winston.format.combine(
 );
 
 const logger = winston.createLogger({
-    level: 'info',
+    level: 'info' ,
     transports: [
         
         new winston.transports.File({ filename: 'error.log',dirname: logDir, level: 'error', format: logfileformat }),
@@ -32,9 +32,13 @@ const logger = winston.createLogger({
     exceptionHandlers: [
         new winston.transports.File({ filename: 'exceptions.log', dirname: logDir})
     ],
+   
+
+    
 
 
 });
+
 if (isDev) {
     logger.add(new winston.transports.Console({
         format: consoleformat,
