@@ -63,38 +63,33 @@ paths:
         '500':
           description: Internal server error
 
-  /analytics/top-selling-items:
+  /analytics/average-order-value:
     get:
       tags: [analytics]
-      summary: Get top selling items
-      parameters:
-        - name: limit
-          in: query
-          required: false
-          schema:
-            type: integer
-            default: 10
+      summary: Get average order value
+      description: Returns the average value per order
       responses:
         '200':
-          description: Top selling items by quantity
+          description: Average order value calculated successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TopSellingItemsResponse'
+                $ref: '#/components/schemas/AverageOrderValueResponse'
         '500':
           description: Internal server error
 
-  /analytics/customer-metrics:
+  /analytics/price-range-distribution:
     get:
       tags: [analytics]
-      summary: Get customer behavior metrics
+      summary: Get order distribution by price ranges
+      description: Returns how many orders fall into different price ranges
       responses:
         '200':
-          description: Customer metrics and analytics
+          description: Price range distribution calculated successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CustomerMetricsResponse'
+                $ref: '#/components/schemas/PriceRangeDistributionResponse'
         '500':
           description: Internal server error
 
@@ -106,9 +101,6 @@ components:
         totalOrders:
           type: integer
           example: 128
-        timePeriod:
-          type: string
-          example: "all-time"
 
     OrdersByCategoryResponse:
       type: object
@@ -139,9 +131,6 @@ components:
         currency:
           type: string
           example: "USD"
-        timePeriod:
-          type: string
-          example: "all-time"
 
     RevenueByCategoryResponse:
       type: object
@@ -162,52 +151,27 @@ components:
                 type: number
                 format: float
                 example: 54.6
-              currency:
-                type: string
-                example: "USD"
 
-    TopSellingItemsResponse:
+    AverageOrderValueResponse:
+      type: number
+      format: float
+      example: 120.59
+
+    PriceRangeDistributionResponse:
       type: object
       properties:
-        period:
-          type: string
-          example: "all-time"
-        items:
+        priceRanges:
           type: array
           items:
             type: object
             properties:
-              itemId:
+              range:
                 type: string
-                example: "cake-123"
-              itemName:
-                type: string
-                example: "Chocolate Birthday Cake"
-              category:
-                type: string
-                example: "Cake"
-              quantitySold:
+                example: "$0-50"
+              count:
                 type: integer
                 example: 45
-              totalRevenue:
+              percentage:
                 type: number
                 format: float
-                example: 2250.00
-
-    CustomerMetricsResponse:
-      type: object
-      properties:
-        totalCustomers:
-          type: integer
-          example: 89
-        averageOrderValue:
-          type: number
-          format: float
-          example: 125.50
-        repeatCustomerRate:
-          type: number
-          format: float
-          example: 42.5
-        newCustomersThisMonth:
-          type: integer
-          example: 15
+                example: 35.2
