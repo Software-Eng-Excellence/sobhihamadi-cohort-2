@@ -4,98 +4,98 @@ import { Cake, identifierCake } from '../../model/cake.model';
 
 
 export class cakebuilder {
-    private _type!: string;
-    private _flavor!: string;
-    private _filling!: string;
-    private _size!: number;
-    private _layers!: number;
-    private _frostingType!: string;
-    private _frostingFlavor!: string;
-    private _decorationType!: string;
-    private _decorationColor!: string;
-    private _customMessage!: string;
-    private _shape!: string;
-    private _allergies!: string;
-    private _specialIngredients!: string;
-    private _packagingType!: string;
+    private type!: string;
+    private flavor!: string;
+    private filling!: string;
+    private size!: number;
+    private layers!: number;
+    private frostingType!: string;
+    private frostingFlavor!: string;
+    private decorationType!: string;
+    private decorationColor!: string;
+    private customMessage!: string;
+    private shape!: string;
+    private allergies!: string;
+    private specialIngredients!: string;
+    private packagingType!: string;
 
     public static newbuilder(): cakebuilder {
         return new cakebuilder();
     }
 
     settype(type: string): cakebuilder {
-        this._type = type;
+        this.type = type;
         return this;
     }
     setflavor(flavor: string): cakebuilder {
-        this._flavor = flavor;
+        this.flavor = flavor;
         return this;
     }
     setfilling(filling: string): cakebuilder {
-        this._filling = filling;
+        this.filling = filling;
         return this;
     }
     setsize(size: number): cakebuilder {
-        this._size = size;
+        this.size = size;
         return this;
     }
     setlayers(layers: number): cakebuilder {
-        this._layers = layers;
+        this.layers = layers;
         return this;
     }
     setfrostingType(frostingType: string): cakebuilder {
-        this._frostingType = frostingType;
+        this.frostingType = frostingType;
         return this;
     }
     setfrostingFlavor(frostingFlavor: string): cakebuilder {
-        this._frostingFlavor = frostingFlavor;
+        this.frostingFlavor = frostingFlavor;
         return this;
     }
     setdecorationType(decorationType: string): cakebuilder {
-        this._decorationType = decorationType;
+        this.decorationType = decorationType;
         return this;
     }
     setdecorationColor(decorationColor: string): cakebuilder {
-        this._decorationColor = decorationColor;
+        this.decorationColor = decorationColor;
         return this;
     }
     setcustomMessage(customMessage: string): cakebuilder {
-        this._customMessage = customMessage;
+        this.customMessage = customMessage;
         return this;
     }
     setshape(shape: string): cakebuilder {
-        this._shape = shape;
+        this.shape = shape;
         return this;
     }
     setallergies(allergies: string): cakebuilder {
-        this._allergies = allergies;
+        this.allergies = allergies;
         return this;
     }
     setspecialIngredients(specialIngredients: string): cakebuilder {
-        this._specialIngredients = specialIngredients;
+        this.specialIngredients = specialIngredients;
         return this;
     }
     setpackagingType(packagingType: string): cakebuilder {
-        this._packagingType = packagingType;
+        this.packagingType = packagingType;
         return this;
     }
    build(): Cake {
     
     const requiredFields = [
-        this._type,
-        this._flavor,
-        this._filling,
-        this._size,
-        this._layers,
-        this._frostingType,
-        this._frostingFlavor,
-        this._decorationType,
-        this._decorationColor,
-        this._customMessage,
-        this._shape,
-        this._allergies,
-        this._specialIngredients,
-        this._packagingType
+        this.type,
+        this.flavor,
+        this.filling,
+        this.size,
+        this.layers,
+        this.frostingType,
+        this.frostingFlavor,
+        this.decorationType,
+        this.decorationColor,
+        this.customMessage,
+        this.shape,
+        this.allergies,
+        this.specialIngredients,
+        this.packagingType
     ];
 
     for (const field of requiredFields) {
@@ -108,20 +108,20 @@ export class cakebuilder {
    
 
     return new Cake(
-        this._type,
-        this._flavor,
-        this._filling,
-        this._size,
-        this._layers,
-        this._frostingType,
-        this._frostingFlavor,
-        this._decorationType,
-        this._decorationColor,
-        this._customMessage,
-        this._shape,
-        this._allergies,
-        this._specialIngredients,
-        this._packagingType
+        this.type,
+        this.flavor,
+        this.filling,
+        this.size,
+        this.layers,
+        this.frostingType,
+        this.frostingFlavor,
+        this.decorationType,
+        this.decorationColor,
+        this.customMessage,
+        this.shape,
+        this.allergies,
+        this.specialIngredients,
+        this.packagingType
     );
 }
     

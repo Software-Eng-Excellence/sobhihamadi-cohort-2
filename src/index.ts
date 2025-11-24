@@ -6,7 +6,8 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import requestLogger from './middleware/requestLogger';
 import routes from './routes';
-import { APIException } from './util/exceptions/APIException';
+
+import { HTTPException } from './util/exceptions/http/HttpExceptions';
 
 
 const app=express();
@@ -34,17 +35,22 @@ app.use((req, res)=>{
 
 app.use('/', routes);
 app.use((err:Error, req:Request, res:Response, next:NextFunction)=>{
-     if(err instanceof APIException){
-          const APIException=err as APIException;
-          logger.error(`APIException: with status %d %s`, APIException.statusCode, err.message);
-          res.status(APIException.statusCode).json({error:err.message});
+     if(err instanceof HTTPException){
+          const HttpExceptions=err as HTTPException;
+          logger.error("%s %d %s %o", HttpExceptions.name, HttpExceptions.status
+               , HttpExceptions.message, HttpExceptions.details);
+          res.status(HttpExceptions.status).json({
+               message:HttpExceptions.message,
+               details:HttpExceptions.details || undefined
+          });
      }
      else{
           logger.error(`Unhandled Exception: %s`, err.message);
-          res.status(500).json({error:'Internal Server Error'});
+          res.status(500).json({
+               message:'Internal Server Error'
+          });
      }
 });
-
 
 app.listen(config.port, config.host,()=>{
     logger.info('Server is running on http:// %s:%d',config.host,config.port);

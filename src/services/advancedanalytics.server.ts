@@ -1,13 +1,15 @@
+import { BadRequestException } from "../util/exceptions/http/BadRequestException";
 import { OrderManagementServer } from "./ordermanagement.server";
 import { OrderVolumeAnalyticsServer } from "./OrderVolumeAnalytics.server";
 import { RevenueAnalyticsServer } from "./revenueanalytics.server";
 
 
 
+
 export class AdvancedAnalyticsServer {
-    constructor(private ordervolumeAnalyticsServer1: OrderVolumeAnalyticsServer,
-        private RevenueAnalyticsServer1: RevenueAnalyticsServer,
-    private ordermanagement1: OrderManagementServer) {}
+    constructor(private readonly ordervolumeAnalyticsServer1: OrderVolumeAnalyticsServer,
+        private readonly RevenueAnalyticsServer1: RevenueAnalyticsServer,
+    private readonly ordermanagement1: OrderManagementServer) {}
 
     
 
@@ -36,7 +38,9 @@ public async getPriceRangeDistribution(): Promise<{
     if (totalOrders === 0) {
         return { priceRanges: [] };
     }
-    
+     for (const order of orders) {
+      this.validateAnalyticsOrder(order);
+    }
     // Define price ranges
     const ranges = [
         { range: "$0-50", min: 0, max: 50 },
@@ -61,4 +65,24 @@ public async getPriceRangeDistribution(): Promise<{
     return { priceRanges };
 }
 
+
+  private validateAnalyticsOrder(order: any): void {
+    const missingItem = !order.getItem();
+    const missingCategory = missingItem ? true : !order.getItem().getCategory();
+    const invalidPrice = order.getPrice() == null || isNaN(order.getPrice());
+    const invalidQuantity =
+      order.getQuantity() == null || isNaN(order.getQuantity());
+
+    if (missingItem || missingCategory || invalidPrice || invalidQuantity) {
+      const details = {
+        MissingItem: missingItem,
+        MissingCategory: missingCategory,
+        InvalidPrice: invalidPrice,
+        InvalidQuantity: invalidQuantity,
+        OrderId: order.getid?.(),
+      };
+
+      throw new BadRequestException("Invalid order data for analytics", details);
+    }
+  }
 }

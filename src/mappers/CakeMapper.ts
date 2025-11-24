@@ -1,7 +1,8 @@
-import logger from '../util/logger';
+
 import { cakebuilder, IdentifierCakeBuilder } from '../model/builders/cake.builder';
 import { Cake, identifierCake } from '../model/cake.model';
 import { IMapper } from './IMapper';
+
 
 
 export class CSVCakeMapper implements IMapper<string[], Cake> {
@@ -120,4 +121,50 @@ export class SQLITECakeMapper implements IMapper<ISQliteCake, Cake> {
 
 
 }
-    
+
+export class JsonRequestCakeMapper implements IMapper<any, identifierCake> {
+   
+    map(data: any): identifierCake {
+      
+        const cake = cakebuilder.newbuilder()
+            .settype(data.type)
+            .setflavor(data.flavor)
+            .setfilling(data.filling)
+            .setsize(data.size)
+            .setlayers(data.layers)
+            .setfrostingType(data.frostingType)
+            .setfrostingFlavor(data.frostingFlavor)
+            .setdecorationType(data.decorationType)
+            .setdecorationColor(data.decorationColor)
+            .setcustomMessage(data.customMessage)
+            .setshape(data.shape)
+            .setallergies(data.allergies)
+            .setspecialIngredients(data.specialIngredients)
+            .setpackagingType(data.packagingType)
+            .build();
+        return IdentifierCakeBuilder.newbuilder()
+            .SetId(data.id)
+            .SetCake(cake)
+            .Build();
+    }
+    reverseMap(data: identifierCake): any {
+        return {
+            id: data.getid(),
+            type: data.getType(),
+            flavor: data.getFlavor(),
+            filling: data.getFilling(),
+            size: data.getSize(),
+            layers: data.getLayers(),
+            frostingType: data.getFrostingType(),
+            frostingFlavor: data.getFrostingFlavor(),
+            decorationType: data.getDecorationType(),
+            decorationColor: data.getDecorationColor(),
+            customMessage: data.getCustomMessage(),
+            shape: data.getShape(),
+            allergies: data.getAllergies(),
+            specialIngredients: data.getSpecialIngredients(),
+            packagingType: data.getPackagingType()
+        };
+    }
+
+   }

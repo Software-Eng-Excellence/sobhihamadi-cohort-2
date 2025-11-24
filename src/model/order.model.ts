@@ -1,37 +1,38 @@
 import { OrderBuilder } from "./builders/Order.builder";
-import { identifierItem, IItem } from "./IItem";
+import { identifierItem, IItem, ItemCategory } from "./IItem";
 import { IOrder } from "./IOrder";
 
 export class Order implements IOrder {
-    private _id: string;
-    private _item: IItem;
-    private _quantity: number;
-    private _price: number;
+    private id: string;
+    private item: IItem;
+    private quantity: number;
+    private price: number;
 
     constructor(id: string, item: IItem, quantity: number, price: number) {
-        this._id = id;
-        this._item = item;
-        this._quantity = quantity;
-        this._price = price;
+        this.id = id;
+        this.item = item;
+        this.quantity = quantity;
+        this.price = price;
     }
     getid(): string {
-        return this._id;
+        return this.id;
     }
     getItem(): IItem {
-        return this._item;
+        return this.item;
     }
     getQuantity(): number {
-        return this._quantity;
+        return this.quantity;
     }
     getPrice(): number {
-        return this._price;
+        return this.price;
     }
   
 
 }
 
 export class IdentifierOrderItem  implements IdentifierOrderItem {
-    constructor(private id: string, private IdentifierItem: identifierItem,private quantity: number, private price: number) {
+    
+    constructor(private id: string,  private category: ItemCategory, private IdentifierItem: identifierItem,private quantity: number, private price: number) {
  
     }
     getid(): string {
@@ -50,5 +51,10 @@ export class IdentifierOrderItem  implements IdentifierOrderItem {
     getPrice(): number {
         return this.price;
     }
+    getCategory(): ItemCategory {
+        return this.category;
+    }
+
+    
    
 }

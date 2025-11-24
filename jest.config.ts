@@ -2,7 +2,7 @@ import type { Config } from 'jest';
 const config: Config = {
   preset: 'ts-jest',
   testEnvironment: 'node',
-  roots: ['<rootDir>/tests/services'],
+  roots: ['<rootDir>/tests/controllers'],
   testMatch: ['**/*.test.ts'],
   verbose: true,
   collectCoverage: true,

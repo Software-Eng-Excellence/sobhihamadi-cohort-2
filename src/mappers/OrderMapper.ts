@@ -45,9 +45,10 @@ export class SQLITEOrderMapper implements IMapper<{data: ISQLITEOrderData, item:
     map({data, item}: {data: ISQLITEOrderData, item: identifierItem}): IdentifierOrderItem {
       const order = OrderBuilder.NewBuilder()
         .setId(data.id)
+        .setItem(item)
+  
         .setPrice(data.price)
         .setQuantity(data.quantity)
-        .setItem(item)
         .build();
         return identifierOrderItemBuilder.NewBuilder()
         .setOrder(order)
@@ -69,4 +70,46 @@ export class SQLITEOrderMapper implements IMapper<{data: ISQLITEOrderData, item:
     }
 }
   
+interface IJsonItem {
+    id: string;
+}
+interface IJsonOrder {
+    id: string;
+    item: IJsonItem;
+    quantity: number;
+    price: number;
+}
 
+export class JsonRequestOrderMapper implements IMapper<any, IdentifierOrderItem> {
+    constructor(private itemMapper: IMapper<any, identifierItem>) {
+
+    }
+
+    map(data: any): IdentifierOrderItem {
+        //extract item and build identifierItem
+        const item= this.itemMapper.map(data.IdentifierItem);
+
+        //extract order and build identifierOrder
+        const order = OrderBuilder.NewBuilder()
+            .setId(data.id)
+            .setItem(item)
+            .setQuantity(data.quantity)
+            .setPrice(data.price)
+            .build();
+        return identifierOrderItemBuilder.NewBuilder()
+            .setOrder(order)
+            .setItem(item)
+            .build();
+    }
+    reverseMap(data: IdentifierOrderItem): any {
+        return {
+            
+             ...data
+        };
+    }
+
+
+
+
+    
+}

@@ -28,15 +28,6 @@ export class OrderRepository implements IRepository<identifierOrderItem>, Initia
        
     }
     async create(order: identifierOrderItem): Promise<ID> {
-        
-        //transaction    
-            //insert data into order table
-            // insert data into 'item' table
-        //commit
-        //return the id of the created item
-
-        //if error, log and rollback 
-
 
   let conn;
         
@@ -61,7 +52,8 @@ export class OrderRepository implements IRepository<identifierOrderItem>, Initia
 
         } catch (error : unknown) {
            
-            throw new DbException("Failed to create item in the database.", error as Error);
+            logger.error("Error in OrderRepository.create: %o", error);
+    throw new DbException("Failed to create item in the database.", error as Error);
             
         }
     }
@@ -162,6 +154,8 @@ export class OrderRepository implements IRepository<identifierOrderItem>, Initia
         try {
              const conn=await ConnectionManager.getConnection();
              await conn.exec(CREATE_TABLE);
+               console.log("Item table ready");
+             console.log("Item repo is: ", this.itemrepository);
              await this.itemrepository.init();
              logger.info("Order table created or already exists.");
            

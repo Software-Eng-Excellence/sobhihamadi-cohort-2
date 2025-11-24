@@ -1,5 +1,5 @@
 import { IdentifierOrderItem, Order } from "../order.model";
-import { identifierItem, IItem } from "../IItem";
+import { identifierItem, IItem, ItemCategory } from "../IItem";
 
 
   
@@ -11,6 +11,7 @@ export class OrderBuilder {
     private _item!: IItem;
     private _quantity!: number;
     private _price!: number; 
+
 
     public static NewBuilder(): OrderBuilder {
         return new OrderBuilder();
@@ -64,9 +65,14 @@ export class identifierOrderItemBuilder {
         }
          return new IdentifierOrderItem(
             this.order.getid(),
+            this._item.getCategory(),
+            
+        
+            
             this._item,
-            this.order.getQuantity(),
+             this.order.getQuantity(),
             this.order.getPrice()
+
         );
     }
 }

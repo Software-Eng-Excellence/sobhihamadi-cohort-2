@@ -10,20 +10,20 @@ export class Cake implements IItem {
         return ItemCategory.Cake;
     }
 
-    private _type: string;
-    private _flavor: string;
-    private _filling: string;
-    private _size: number;
-    private _layers: number;
-    private _frostingType: string;
-    private _frostingFlavor: string;
-    private _decorationType: string;
-    private _decorationColor: string;
-    private _customMessage: string;
-    private _shape: string;
-    private _allergies: string;
-    private _specialIngredients: string;
-    private _packagingType: string;
+    private type: string;
+    private flavor: string;
+    private filling: string;
+    private size: number;
+    private layers: number;
+    private frostingType: string;
+    private frostingFlavor: string;
+    private decorationType: string;
+    private decorationColor: string;
+    private customMessage: string;
+    private shape: string;
+    private allergies: string;
+    private specialIngredients: string;
+    private packagingType: string;
     
     constructor(
         type: string,
@@ -42,77 +42,77 @@ export class Cake implements IItem {
         packagingType: string,
     
     ) {
-        this._type = type;
-        this._flavor = flavor;
-        this._filling = filling;
-        this._size = size;
-        this._layers = layers;
-        this._frostingType = frostingType;
-        this._frostingFlavor = frostingFlavor;
-        this._decorationType = decorationType;
-        this._decorationColor = decorationColor;
-        this._customMessage = customMessage;
-        this._shape = shape;
-        this._allergies = allergies;
-        this._specialIngredients = specialIngredients;
-        this._packagingType = packagingType;
+        this.type = type;
+        this.flavor = flavor;
+        this.filling = filling;
+        this.size = size;
+        this.layers = layers;
+        this.frostingType = frostingType;
+        this.frostingFlavor = frostingFlavor;
+        this.decorationType = decorationType;
+        this.decorationColor = decorationColor;
+        this.customMessage = customMessage;
+        this.shape = shape;
+        this.allergies = allergies;
+        this.specialIngredients = specialIngredients;
+        this.packagingType = packagingType;
         
     }
 
     getType(): string {
-        return this._type;
+        return this.type;
     }
 
     getFlavor(): string {
-        return this._flavor;
+        return this.flavor;
     }
 
     getFilling(): string {
-        return this._filling;
+        return this.filling;
     }
 
     getSize(): number {
-        return this._size;
+        return this.size;
     }
 
     getLayers(): number {
-        return this._layers;
+        return this.layers;
     }
 
     getFrostingType(): string {
-        return this._frostingType;
+        return this.frostingType;
     }
 
     getFrostingFlavor(): string {
-        return this._frostingFlavor;
+        return this.frostingFlavor;
     }
 
     getDecorationType(): string {
-        return this._decorationType;
+        return this.decorationType;
     }
 
     getDecorationColor(): string {
-        return this._decorationColor;
+        return this.decorationColor;
     }
 
     getCustomMessage(): string {
-        return this._customMessage;
+        return this.customMessage;
     }
 
     getShape(): string {
-        return this._shape;
+        return this.shape;
     }
 
     getAllergies(): string {
-        return this._allergies;
+        return this.allergies;
     }
 
     getSpecialIngredients(): string {
-        return this._specialIngredients;
+        return this.specialIngredients;
     }
 
     getPackagingType(): string {
-        return this._packagingType;
+        return this.packagingType;
     }
 
     
