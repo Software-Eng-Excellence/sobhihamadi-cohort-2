@@ -1,21 +1,18 @@
 import logger from "./util/logger";
-import { readCSV } from './util/parsers/csvparser';
-import { readJSON } from './util/parsers/jsonparser';
-import { readXML } from './util/parsers/xmlparser';
+import { CSVCakeMapper } from "../src/mappers/CakeMapper";
+import { readCSV } from "./util/parser";
+import { CSVOrderMapper } from "./mappers/OrderMapper";
 
 async function main() {
-    // CSV data
-    const csvData = await readCSV("../data/cake orders.csv");
-    csvData.forEach((row: any) => logger.info(`CSV data: ${row}`)); 
+    const data= await readCSV('src/data/data/cake orders.csv');
+    const cakeMapper = new CSVCakeMapper();
+    const orderMapper = new CSVOrderMapper(cakeMapper);
+    const orders= data.map(orderMapper.map.bind(orderMapper));
 
-    // JSON data
-    const jsonData = await readJSON("./src/data/book orders.json");
-    jsonData.forEach((row: object) => logger.info(`JSON data: ${JSON.stringify(row)}`));
 
-    // XML data
-    const xmlData = await readXML("./src/data/toy orders.xml");
-    const rows = xmlData.data.row;  // assuming rows is always an array
-    rows.forEach((row: object) => logger.info(`XML data: ${JSON.stringify(row)}`));
+    
+    logger.info("list of orders: \n %o", orders);
+
 }
-
+    
 main();
