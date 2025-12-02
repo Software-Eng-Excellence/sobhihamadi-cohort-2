@@ -3,9 +3,19 @@ import { InvalidItemException, ItemNotFoundException } from "../../util/exceptio
 import { id, IRepository } from "repository/IRepository";
 import logger from "../../util/logger";
 import { IOrder } from "model/IOrder";
+import { User } from "model/user.model";
 
 
 export abstract class OrderRepository implements IRepository<IOrder> {
+    getbyemail(email: string): Promise<User> {
+        throw new Error("Method not implemented.");
+    }
+    init(): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
+    mapRowToUser(row: any): User {
+        throw new Error("Method not implemented.");
+    }
 
     protected abstract load(): Promise<IOrder[]>;
 

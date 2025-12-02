@@ -5,6 +5,7 @@ import { DbException, InitializationException, ItemNotFoundException } from "../
 import { ConnectionManager } from "./ConnectionManager";
 import { ItemCategory } from "../../model/IItem";
 import { ISQliteCake, SQLITECakeMapper } from "../../mappers/CakeMapper";
+import { User } from "model/user.model";
 
 
 
@@ -46,6 +47,12 @@ const UPDATE_CAKE=
 
 
 export class CakeOrderRepository implements IRepository<identifierCake>, Initializable {
+    getbyemail(email: string): Promise<User> {
+        throw new Error("Method not implemented.");
+    }
+    mapRowToUser(row: any): User {
+        throw new Error("Method not implemented.");
+    }
 
 
     async init(): Promise<void> {

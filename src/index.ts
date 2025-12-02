@@ -1,15 +1,13 @@
 import config from './config';
-import express, { NextFunction, Request, request, Response, response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import logger from './util/logger';
 import helmet from 'helmet';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import requestLogger from './middleware/requestLogger';
 import routes from './routes';
-
+import cookieParser from 'cookie-parser'
 import { HTTPException } from './util/exceptions/http/HttpExceptions';
-
-
 const app=express();
 
 //config helmet
@@ -24,6 +22,9 @@ app.use(cors())
 
 //config middleware
 app.use(requestLogger);
+
+//cookie parser
+app.use(cookieParser())
 
 //config routes
 app.use('/', routes);
@@ -53,5 +54,7 @@ app.use((err:Error, req:Request, res:Response, next:NextFunction)=>{
 });
 
 app.listen(config.port, config.host,()=>{
+ 
     logger.info('Server is running on http:// %s:%d',config.host,config.port);
+
 });

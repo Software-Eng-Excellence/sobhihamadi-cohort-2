@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { OrderVolumeController } from "../../src/controllers/ordervolume.controller";
-import { OrderVolumeAnalyticsServer } from "../../src/services/OrderVolumeAnalytics.server";
+import { OrderVolumeController } from "../../src/controllers/OrderControllers/ordervolume.controller";
+import { OrderVolumeAnalyticsService } from "../../src/services/OrderManagement/OrderVolumeAnalytics.server";
 import { ItemCategory } from "../../src/model/IItem";
 import { BadRequestException } from "../../src/util/exceptions/http/BadRequestException";
 
@@ -17,7 +17,7 @@ const mockRequest = (): Request => ({} as any as Request);
 
 describe("OrderVolumeController", () => {
   let controller: OrderVolumeController;
-  let volumeService: jest.Mocked<OrderVolumeAnalyticsServer>;
+  let volumeService: jest.Mocked<OrderVolumeAnalyticsService>;
 
   beforeEach(() => {
     volumeService = {

@@ -5,6 +5,7 @@ import { ConnectionManager } from "./PostgreConnection";
 import logger from "../../util/logger";
 import { InitializationException } from "../../util/exceptions/repositoryExceptions";
 import { IBOOK, PostgreBookMapper } from "../../mappers/BookMapper";
+import { User } from "model/user.model";
 
 const CREATE_TABLE_BOOKS_QUERY = `CREATE TABLE IF NOT EXISTS book (
     "id" TEXT PRIMARY KEY,
@@ -39,6 +40,12 @@ const INSERT_BOOK_QUERY = `INSERT INTO book
  const SELECT_BY_ID=`SELECT * FROM book WHERE id=$1;`
 
 export class BookRepositoryPostgre implements IRepository<IdentifierBook>, Initializable{
+    getbyemail(email: string): Promise<User> {
+        throw new Error("Method not implemented.");
+    }
+    mapRowToUser(row: any): User {
+        throw new Error("Method not implemented.");
+    }
   
     async init(): Promise<void> {
         try {

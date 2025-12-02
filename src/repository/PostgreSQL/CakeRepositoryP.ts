@@ -4,6 +4,7 @@ import { ConnectionManager } from "./PostgreConnection";
 import logger from "../../util/logger";
 import { InitializationException } from "../../util/exceptions/repositoryExceptions";
 import { ISQliteCake, SQLITECakeMapper } from "../../mappers/CakeMapper";
+import { User } from "model/user.model";
 
 const CREATE_TABLE = `CREATE TABLE IF NOT EXISTS cake( 
  "id" TEXT PRIMARY KEY,
@@ -54,6 +55,12 @@ WHERE "id"=$15;
 
 const DELETE_CAKE_BY_ID=`DELETE FROM cake WHERE id=$1;`;
 export class CakeRepositoryPostgre implements IRepository<identifierCake>, Initializable {
+    getbyemail(email: string): Promise<User> {
+        throw new Error("Method not implemented.");
+    }
+    mapRowToUser(row: any): User {
+        throw new Error("Method not implemented.");
+    }
 
 async init(): Promise<void> {
     try{

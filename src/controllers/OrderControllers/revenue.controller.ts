@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
-import { RevenueAnalyticsServer } from "services/revenueanalytics.server";
+import { RevenueAnalyticsService } from "../../services/OrderManagement/revenueanalytics.server";
 
 
 
 
 export class RevenueController {
 
-    public constructor(private revenueAnalyticsServer: RevenueAnalyticsServer) {}
+    public constructor(private revenueAnalyticsServer: RevenueAnalyticsService) {}
 
     public async getTotalRevenue(req: Request, res: Response) {
 

@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import { AdvancedAnalyticsServer } from "services/advancedanalytics.server";
+import { AdvancedAnalyticsService } from "../../services/OrderManagement/advancedanalytics.server";
 
 
 
 export class AdvancedAnalyticsController {
-    constructor(private advancedAnalyticsServer: AdvancedAnalyticsServer) {}
+    constructor(private advancedAnalyticsServer: AdvancedAnalyticsService) {}
 
    public  async getAverageOrderValue(req:Request,res:Response) {
          const AverageOrderValue=await this.advancedAnalyticsServer.getAverageOrderValue();

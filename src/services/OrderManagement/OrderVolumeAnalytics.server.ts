@@ -1,11 +1,11 @@
-import { ItemCategory } from "../model/IItem";
-import { OrderManagementServer } from "./ordermanagement.server";
-import { BadRequestException } from "../util/exceptions/http/BadRequestException";
+import { ItemCategory } from "../../model/IItem";
+import { OrderManagementService } from "./ordermanagement.server";
+import { BadRequestException } from "../../util/exceptions/http/BadRequestException";
 
 
 
-export class OrderVolumeAnalyticsServer {
-    constructor(private orderManagementServer1: OrderManagementServer) {}
+export class OrderVolumeAnalyticsService {
+    constructor(private orderManagementServer1: OrderManagementService) {}
 
     public async getTotalOrders(): Promise<number> {
         const orders= await this.orderManagementServer1.listOrders();

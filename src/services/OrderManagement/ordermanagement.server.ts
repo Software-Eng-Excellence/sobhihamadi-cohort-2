@@ -1,15 +1,14 @@
-import { IdentifierOrderItem, Order } from "../model/order.model";
-import { ServerException } from "../util/exceptions/serverexception";
-import { RepositoryFactory } from "../repository/Repository.factory";
-import config from "../config";
-import { ItemCategory } from "../model/IItem";
-import { identifierOrderItem } from "../model/IOrder";
-import { IRepository } from "../repository/IRepository";
-import { NotFoundException } from "../util/exceptions/http/NotFoundException";
-import { BadRequestException } from "../util/exceptions/http/BadRequestException";
+import { IdentifierOrderItem, Order } from "../../model/order.model";
+import { RepositoryFactory } from "../../repository/Repository.factory";
+import config from "../../config";
+import { ItemCategory } from "../../model/IItem";
+import { identifierOrderItem } from "../../model/IOrder";
+import { IRepository } from "../../repository/IRepository";
+import { NotFoundException } from "../../util/exceptions/http/NotFoundException";
+import { BadRequestException } from "../../util/exceptions/http/BadRequestException";
 
 
-export class OrderManagementServer {
+export class OrderManagementService {
 
 //create order 
 public async  createOrder(order:IdentifierOrderItem): Promise<IdentifierOrderItem> {

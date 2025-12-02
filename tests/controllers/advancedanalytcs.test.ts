@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { AdvancedAnalyticsController } from "../../src/controllers/advancedanalytics.controller";
-import { AdvancedAnalyticsServer } from "../../src/services/advancedanalytics.server";
+import { AdvancedAnalyticsController } from "../../src/controllers/OrderControllers/advancedanalytics.controller";
+import { AdvancedAnalyticsService } from "../../src/services/OrderManagement/advancedanalytics.server";
 import { BadRequestException } from "../../src/util/exceptions/http/BadRequestException";
 
 
@@ -16,7 +16,7 @@ const mockRequest = (): Request => ({} as any as Request);
 
 describe("AdvancedAnalyticsController", () => {
   let controller: AdvancedAnalyticsController;
-  let analyticsService: jest.Mocked<AdvancedAnalyticsServer>;
+  let analyticsService: jest.Mocked<AdvancedAnalyticsService>;
 
   beforeEach(() => {
     analyticsService = {

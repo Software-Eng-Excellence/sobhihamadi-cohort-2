@@ -42,7 +42,7 @@ const logger = winston.createLogger({
 if (isDev) {
     logger.add(new winston.transports.Console({
         format: consoleformat,
-        level: 'debug',
+        level: 'debug'  , 
     }))
 };
     console.log("Logger initialized")

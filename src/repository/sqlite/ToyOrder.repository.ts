@@ -4,6 +4,7 @@ import { ConnectionManager } from "./ConnectionManager";
 import logger from "../../util/logger";
 import { DbException, InitializationException, ItemNotFoundException } from "../../util/exceptions/repositoryExceptions";
 import { IToyMapper, PostgreToyMapper } from "../../mappers/ToyMapper";
+import { User } from "model/user.model";
 
 const CREATE_TABLE = `CREATE TABLE IF NOT EXISTS toy (
     id TEXT PRIMARY KEY,
@@ -24,6 +25,12 @@ const DELETE_TOY_BY_ID=`DELETE FROM toy WHERE id=?;`
 const UPDATE_TOY=`UPDATE toy SET type=?, ageGroup=?, brand=?, material=?, educational=?, batteryRequired=? WHERE id=?;`
 
 export class ToyOrderRepository implements IRepository<IdentifierToy>, Initializable {
+    getbyemail(email: string): Promise<User> {
+        throw new Error("Method not implemented.");
+    }
+    mapRowToUser(row: any): User {
+        throw new Error("Method not implemented.");
+    }
    async  init(): Promise<void> {
          try {
            const conn=await ConnectionManager.getConnection();

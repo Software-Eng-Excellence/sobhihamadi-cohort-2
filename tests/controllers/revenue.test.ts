@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { RevenueController } from "../../src/controllers/revenue.controller";
-import { RevenueAnalyticsServer } from "../../src/services/revenueanalytics.server";
+import { RevenueController } from "../../src/controllers/OrderControllers/revenue.controller";
+import { RevenueAnalyticsService } from "../../src/services/OrderManagement/revenueanalytics.server";
 import { ItemCategory } from "../../src/model/IItem"; 
 import { BadRequestException } from "../../src/util/exceptions/http/BadRequestException";
 
@@ -15,7 +15,7 @@ const mockRequest = (): Request => ({} as any as Request);
 
 describe("RevenueController", () => {
   let controller: RevenueController;
-  let revenueService: jest.Mocked<RevenueAnalyticsServer>;
+  let revenueService: jest.Mocked<RevenueAnalyticsService>;
 
   beforeEach(() => {
     revenueService = {

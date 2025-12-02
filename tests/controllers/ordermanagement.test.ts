@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { OrderController } from "../../src/controllers/order.controller";
-import { OrderManagementServer } from "../../src/services/ordermanagement.server";
+import { OrderController } from "../../src/controllers/OrderControllers/order.controller";
+import { OrderManagementService } from "../../src/services/OrderManagement/ordermanagement.server";
 import { BadRequestException } from "../../src/util/exceptions/http/BadRequestException";
 import { JsonRequestFactory } from "../../src/mappers";
 
@@ -24,7 +24,7 @@ jest.mock("../../src/mappers", () => ({
 
 describe("OrderController ", () => {
   let controller: OrderController;
-  let orderService: jest.Mocked<OrderManagementServer>;
+  let orderService: jest.Mocked<OrderManagementService>;
 
   beforeEach(() => {
     orderService = {

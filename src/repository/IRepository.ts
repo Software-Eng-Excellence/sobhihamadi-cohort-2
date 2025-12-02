@@ -1,5 +1,4 @@
-
-
+import { User } from "model/user.model";
 
 export type ID=string;
 export interface id {
@@ -16,11 +15,21 @@ export interface Initializable {
 }
 
 
+
+
 export interface IRepository<T extends id> {
+ getbyemail(email: string): Promise<User>
 
+  /**
+ * @returns A Promise that resolves when initialization is complete
+ * @throws {InitializationException} If there is an error during repository initialization, such as:
 
+ */
 
+  
 
+  
+  mapRowToUser(row: any): User;
 
     /**
  * Creates a new item in the repository.

@@ -1,22 +1,25 @@
-import { BadRequestException } from "../util/exceptions/http/BadRequestException";
-import { OrderManagementServer } from "./ordermanagement.server";
-import { OrderVolumeAnalyticsServer } from "./OrderVolumeAnalytics.server";
-import { RevenueAnalyticsServer } from "./revenueanalytics.server";
+import { BadRequestException } from "../../util/exceptions/http/BadRequestException";
+import { OrderManagementService } from "./ordermanagement.server";
+import { OrderVolumeAnalyticsService } from "./OrderVolumeAnalytics.server";
+import { RevenueAnalyticsService } from "./revenueanalytics.server";
 
 
 
 
-export class AdvancedAnalyticsServer {
-    constructor(private readonly ordervolumeAnalyticsServer1: OrderVolumeAnalyticsServer,
-        private readonly RevenueAnalyticsServer1: RevenueAnalyticsServer,
-    private readonly ordermanagement1: OrderManagementServer) {}
+export class AdvancedAnalyticsService {
+    constructor(private readonly ordervolumeAnalyticsServer1: OrderVolumeAnalyticsService,
+        private readonly RevenueAnalyticsServer1: RevenueAnalyticsService,
+    private readonly ordermanagement1: OrderManagementService) {}
 
     
 
 //Average order value
 public async getAverageOrderValue(): Promise<number> {
-    const orders= await this.ordervolumeAnalyticsServer1.getTotalOrders();
-    const totalRevenue= await this.RevenueAnalyticsServer1.getTotalRevenue();
+    const [orders, totalRevenue] = await Promise.all([
+        this.ordervolumeAnalyticsServer1.getTotalOrders(),
+   await this.RevenueAnalyticsServer1.getTotalRevenue(),
+    ]);
+   
     if(orders===0){
         return 0;
     }

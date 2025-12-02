@@ -4,6 +4,7 @@ import { ConnectionManager } from "./PostgreConnection";
 import logger from "../../util/logger";
 import { InitializationException } from "../../util/exceptions/repositoryExceptions";
 import { IToyMapper, PostgreToyMapper } from "../../mappers/ToyMapper";
+import { User } from "model/user.model";
 
 
 const CREATE_TABLE_TOYS = `CREATE TABLE IF NOT EXISTS toy (
@@ -32,6 +33,12 @@ const UPDATE_TOY_QUERY=`UPDATE toy SET
     const DROP_TABLE_TOYS=`DROP TABLE IF EXISTS toy;`;
 
 export class ToyPostgreRepository implements IRepository<IdentifierToy>, Initializable{
+    getbyemail(email: string): Promise<User> {
+        throw new Error("Method not implemented.");
+    }
+    mapRowToUser(row: any): User {
+        throw new Error("Method not implemented.");
+    }
 
     async drop(): Promise<void> {
         const conn=await ConnectionManager.getPostgreConnection();

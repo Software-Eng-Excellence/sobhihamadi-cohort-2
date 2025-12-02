@@ -1,18 +1,18 @@
-import { RevenueController } from "../controllers/revenue.controller";
+import { RevenueController } from "../controllers/OrderControllers/revenue.controller";
 import { Router } from "express";
 import { asynchandler } from "../middleware/AsyncHandler";
-import { OrderManagementServer } from "../services/ordermanagement.server";
-import { RevenueAnalyticsServer } from "../services/revenueanalytics.server";
-import { OrderVolumeController } from "../controllers/ordervolume.controller";
-import { OrderVolumeAnalyticsServer } from "../services/OrderVolumeAnalytics.server";
-import { AdvancedAnalyticsController } from "../controllers/advancedanalytics.controller";
-import { AdvancedAnalyticsServer } from "../services/advancedanalytics.server";
+import { OrderManagementService } from "../services/OrderManagement/ordermanagement.server";
+import { RevenueAnalyticsService } from "../services/OrderManagement/revenueanalytics.server";
+import { OrderVolumeController } from "../controllers/OrderControllers/ordervolume.controller";
+import { OrderVolumeAnalyticsService } from "../services/OrderManagement/OrderVolumeAnalytics.server";
+import { AdvancedAnalyticsController } from "../controllers/OrderControllers/advancedanalytics.controller";
+import { AdvancedAnalyticsService } from "../services/OrderManagement/advancedanalytics.server";
 
-const orderManagementServer = new OrderManagementServer();
+const orderManagementServer = new OrderManagementService();
 
-const orderVolumeAnalyticsServer = new OrderVolumeAnalyticsServer(orderManagementServer);
-const revenueAnalyticsServer = new RevenueAnalyticsServer(orderManagementServer);
-const advancedanalyticsServer = new AdvancedAnalyticsServer(
+const orderVolumeAnalyticsServer = new OrderVolumeAnalyticsService(orderManagementServer);
+const revenueAnalyticsServer = new RevenueAnalyticsService(orderManagementServer);
+const advancedanalyticsServer = new AdvancedAnalyticsService(
    orderVolumeAnalyticsServer, revenueAnalyticsServer, orderManagementServer);
 
 

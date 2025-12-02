@@ -1,19 +1,18 @@
 import { NextFunction, Request, Response } from "express";
-import { OrderManagementServer } from "../services/ordermanagement.server";
-import { APIException } from "../util/exceptions/APIException";
-import { IdentifierOrderItem } from "../model/order.model";
+import { OrderManagementService } from "../../services/OrderManagement/ordermanagement.server";
+import { IdentifierOrderItem } from "../../model/order.model";
 
-import { JsonRequestFactory } from "../mappers";
-import logger from "../util/logger";
+import { JsonRequestFactory } from "../../mappers";
+import logger from "../../util/logger";
 
 
-import { BadRequestException } from "../util/exceptions/http/BadRequestException";
+import { BadRequestException } from "../../util/exceptions/http/BadRequestException";
 
 
 
 
 export class OrderController {
-    constructor(private readonly orderService: OrderManagementServer,
+    constructor(private readonly orderService: OrderManagementService,
     ) {}
 
 

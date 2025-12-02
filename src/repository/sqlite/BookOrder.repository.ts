@@ -4,6 +4,7 @@ import { ConnectionManager } from "./ConnectionManager";
 import logger from "../../util/logger";
 import { DbException, InitializationException, ItemNotFoundException } from "../../util/exceptions/repositoryExceptions";
 import { IBOOK, PostgreBookMapper } from "../../mappers/BookMapper";
+import { User } from "model/user.model";
 
 const CREATE_TABLE = `CREATE TABLE IF NOT EXISTS "book" (
     id TEXT PRIMARY KEY,
@@ -16,13 +17,21 @@ const CREATE_TABLE = `CREATE TABLE IF NOT EXISTS "book" (
     specialEdition TEXT,
     packaging TEXT NOT NULL
 );`
-const INSERT_BOOK=`INSERT INTO book (id, bookTitle, author, genre, format, language, publisher, specialEdition, packaging)
+const INSERT_BOOK=`INSERT INTO book (id, bookTitle, author, genre, format,
+ language, publisher, specialEdition, packaging)
  VALUES (?,?,?,?,?,?,?, ?,?);`
  const SELECT_BOOK_BY_ID=`SELECT * FROM book WHERE id=?;`
  const GET_ALL=`SELECT * FROM book;`
  const DELETE_BOOK_BY_ID=`DELETE FROM book WHERE id=?;`
- const UPDATE_BOOK=`UPDATE book SET bookTitle=?, author=?, genre=?, format=?, language=?, publisher=?, specialEdition=?, packaging=? WHERE id=?;`
+ const UPDATE_BOOK=`UPDATE book SET bookTitle=?, author=?,
+  genre=?, format=?, language=?, publisher=?, specialEdition=?, packaging=? WHERE id=?;`
 export class BookOrderRepository implements IRepository<IdentifierBook>, Initializable{
+    getbyemail(email: string): Promise<User> {
+        throw new Error("Method not implemented.");
+    }
+    mapRowToUser(row: any): User {
+        throw new Error("Method not implemented.");
+    }
     async create(item: IdentifierBook): Promise<ID> {
         try {
             const conn= await ConnectionManager.getConnection();

@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
-import { OrderVolumeAnalyticsServer } from "services/OrderVolumeAnalytics.server";
+import { OrderVolumeAnalyticsService } from "../../services/OrderManagement/OrderVolumeAnalytics.server";
 
 
 
 
 export class OrderVolumeController {
-    constructor(private readonly ordervolumeService:OrderVolumeAnalyticsServer) {}
+    constructor(private readonly ordervolumeService:OrderVolumeAnalyticsService) {}
 
     public async gettotalOrder(req:Request, res:Response){
         const Orderslength= await this.ordervolumeService.getTotalOrders();
