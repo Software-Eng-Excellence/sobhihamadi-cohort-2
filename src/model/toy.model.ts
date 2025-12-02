@@ -1,4 +1,5 @@
-import { IItem, ItemCategory } from "./IItem";
+import { ID } from "repository/IRepository";
+import { identifierItem, IItem, ItemCategory } from "./IItem";
 
 
 export class Toy implements IItem {
@@ -40,27 +41,27 @@ export class Toy implements IItem {
 
    
 
-    get Type(): string {
+    getType(): string {
         return this.type;
     }
 
-    get AgeGroup(): string {
+    getAgeGroup(): string {
         return this.ageGroup;
     }
 
-    get Brand(): string {
+    getBrand(): string {
         return this.brand;
     }
 
-    get Material(): string {
+    getMaterial(): string {
         return this.material;
     }
 
-    get BatteryRequired(): boolean {
+    getBatteryRequired(): boolean {
         return this.batteryRequired;
     }
 
-    get Educational(): boolean {
+    getEducational(): boolean {
         return this.educational;
     }
 
@@ -68,4 +69,32 @@ export class Toy implements IItem {
 
    
 }
+export class IdentifierToy extends Toy implements  identifierItem   {
+    constructor(
+        private id: ID,
+        type: string,
+        ageGroup: string,
+        brand: string,
+        material: string,
+        batteryRequired: boolean,
+        educational: boolean,
+    ) {
+    super(
+        type,
+        ageGroup,
+        brand,
+        material,
+        batteryRequired,
+        educational,
+    ) 
+    }
+    getid(): ID {
+       
+        return this.id;
+    }
+  
+}
+
+   
+
 

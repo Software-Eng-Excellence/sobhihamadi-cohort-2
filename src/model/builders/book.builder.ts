@@ -1,4 +1,4 @@
-import { Book } from "../../model/book.model";
+import { Book, IdentifierBook } from "../../model/book.model";
 import logger from "../../util/logger";
 
 
@@ -77,3 +77,40 @@ export class bookBuilder {
     }
 
 };
+export class IdentifierBookBuilder {
+    private id!: string;
+    private book!: Book;
+    public static NewBuilder(): IdentifierBookBuilder {
+        return new IdentifierBookBuilder();
+    }
+    SetId(id: string): IdentifierBookBuilder {
+        if (!id) {
+            logger.error('ID cannot be empty');
+            throw new Error('ID cannot be empty');
+        }
+        this.id = id;
+        return this;
+    }
+    SetBook(book: Book): IdentifierBookBuilder {
+        this.book = book;
+        return this;
+    }
+    Build(): IdentifierBook {
+        if (!this.id || !this.book) {
+            logger.error('ID is required to build IdentifierBook');
+            throw new Error('ID is required to build IdentifierBook');
+        }
+      
+        return new IdentifierBook(
+            this.id,
+            this.book.getBookTitle(),
+            this.book.getAuthor(),
+            this.book.getGenre(),
+            this.book.getFormat(),  
+            this.book.getLanguage(),
+            this.book.getPublisher(),
+            this.book.getSpecialEdition(),
+            this.book.getPackaging()
+        );
+    }
+}

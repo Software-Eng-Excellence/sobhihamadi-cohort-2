@@ -1,4 +1,5 @@
-import { IItem, ItemCategory } from "./IItem";
+import { ID } from "repository/IRepository";
+import { identifierItem, IItem, ItemCategory } from "./IItem";
 
 export class Book implements IItem {
 
@@ -78,3 +79,31 @@ export class Book implements IItem {
    
     
 }
+export class IdentifierBook extends Book implements  identifierItem {
+    constructor(
+        private id: ID,
+         bookTitle: string,
+        author: string,
+        genre: string,
+        format: string,
+        language: string,
+        publisher: string,
+        specialEdition: string,
+        packaging: string,
+    ) {
+    super(
+        bookTitle,
+        author,
+        genre,
+        format,
+        language,
+        publisher,
+        specialEdition,
+        packaging,
+    ) 
+    }
+
+        getid(): ID {
+            return this.id;
+        }
+    }

@@ -1,0 +1,177 @@
+openapi: 3.0.0
+info:
+  title: Analytics API
+  description: API for business intelligence and analytics
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/api
+
+paths:
+  /analytics/total-orders:
+    get:
+      tags: [analytics]
+      summary: Get total number of orders
+      responses:
+        '200':
+          description: Total orders count
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TotalOrdersResponse'
+        '500':
+          description: Internal server error
+
+  /analytics/orders-by-category:
+    get:
+      tags: [analytics]
+      summary: Get orders count by category
+      responses:
+        '200':
+          description: Orders breakdown by category
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrdersByCategoryResponse'
+        '500':
+          description: Internal server error
+
+  /analytics/total-revenue:
+    get:
+      tags: [analytics]
+      summary: Get total revenue
+      responses:
+        '200':
+          description: Total revenue across all orders
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TotalRevenueResponse'
+        '500':
+          description: Internal server error
+
+  /analytics/revenue-by-category:
+    get:
+      tags: [analytics]
+      summary: Get revenue breakdown by category
+      responses:
+        '200':
+          description: Revenue breakdown by category
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RevenueByCategoryResponse'
+        '500':
+          description: Internal server error
+
+  /analytics/average-order-value:
+    get:
+      tags: [analytics]
+      summary: Get average order value
+      description: Returns the average value per order
+      responses:
+        '200':
+          description: Average order value calculated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AverageOrderValueResponse'
+        '500':
+          description: Internal server error
+
+  /analytics/price-range-distribution:
+    get:
+      tags: [analytics]
+      summary: Get order distribution by price ranges
+      description: Returns how many orders fall into different price ranges
+      responses:
+        '200':
+          description: Price range distribution calculated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PriceRangeDistributionResponse'
+        '500':
+          description: Internal server error
+
+components:
+  schemas:
+    TotalOrdersResponse:
+      type: object
+      properties:
+        totalOrders:
+          type: integer
+          example: 128
+
+    OrdersByCategoryResponse:
+      type: object
+      properties:
+        breakdown:
+          type: array
+          items:
+            type: object
+            properties:
+              category:
+                type: string
+                example: "Cake"
+              count:
+                type: integer
+                example: 42
+              percentage:
+                type: number
+                format: float
+                example: 32.8
+
+    TotalRevenueResponse:
+      type: object
+      properties:
+        totalRevenue:
+          type: number
+          format: float
+          example: 15432.75
+        currency:
+          type: string
+          example: "USD"
+
+    RevenueByCategoryResponse:
+      type: object
+      properties:
+        breakdown:
+          type: array
+          items:
+            type: object
+            properties:
+              category:
+                type: string
+                example: "Cake"
+              revenue:
+                type: number
+                format: float
+                example: 8420.50
+              percentage:
+                type: number
+                format: float
+                example: 54.6
+
+    AverageOrderValueResponse:
+      type: number
+      format: float
+      example: 120.59
+
+    PriceRangeDistributionResponse:
+      type: object
+      properties:
+        priceRanges:
+          type: array
+          items:
+            type: object
+            properties:
+              range:
+                type: string
+                example: "$0-50"
+              count:
+                type: integer
+                example: 45
+              percentage:
+                type: number
+                format: float
+                example: 35.2
