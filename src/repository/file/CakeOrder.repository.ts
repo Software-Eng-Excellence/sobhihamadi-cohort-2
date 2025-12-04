@@ -23,7 +23,7 @@ export class cakeOrderRepository extends OrderRepository {
         return csv.map(this.mapper.map.bind(this.mapper));
         
     } catch (error: unknown) {
-        throw new DbException("Failed to load data from CSV file.", error as Error);
+        throw new DbException("Failed to load data from CSV file.");
 
         
     }
@@ -50,7 +50,7 @@ export class cakeOrderRepository extends OrderRepository {
       
 
  catch (error: unknown) {
-        throw new DbException("Failed to load data from CSV file.", error as Error);
+        throw new DbException("Failed to load data from CSV file.");
 
         
     }

@@ -16,7 +16,7 @@ export class ConnectionManager {
           ssl: { rejectUnauthorized: false },
         });
       } catch (error: unknown) {
-        throw new DatabaseConnectionException("Failed to connect to PostgreSQL.", error as Error);
+        throw new DatabaseConnectionException("Failed to connect to PostgreSQL.");
       }
     }
     return this.pool;
