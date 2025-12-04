@@ -15,7 +15,7 @@ export class ConnectionManager {
           connectionString: config.storagePath.postgres.url,
           ssl: { rejectUnauthorized: false },
         });
-      } catch (error: unknown) {
+      } catch  {
         throw new DatabaseConnectionException("Failed to connect to PostgreSQL.");
       }
     }
