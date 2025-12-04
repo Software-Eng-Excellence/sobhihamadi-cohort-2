@@ -10,7 +10,7 @@ const requestLogger = (req:Request, res:Response, next:NextFunction) => {
           const satus=res.statusCode;
     const { method, originalUrl } = req;
     
-    let level=satus>=500?'error':satus>=400?'warn':'info';
+    const level=satus>=500?'error':satus>=400?'warn':'info';
     logger.log({level,message:`${method} ${satus} ${originalUrl} ${ResponseTime}ms`});
 });
 

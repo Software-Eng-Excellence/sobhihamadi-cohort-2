@@ -1,8 +1,8 @@
-import { request, Request, Response } from "express";
+import { Request, Response } from "express";
 import { AuthenticationService } from "../services/Authentication.service";
 import { BadRequestException } from "../util/exceptions/http/BadRequestException";
 import { UserService } from "../services/UserService";
-import { authRequest, userPayload } from "../config/db_mode";
+import {  userPayload } from "../config/db_mode";
 import { toRoles } from "../config/roles";
 
 

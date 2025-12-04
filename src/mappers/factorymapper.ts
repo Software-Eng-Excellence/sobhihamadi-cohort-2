@@ -5,7 +5,7 @@ import {  PostgreToyMapper } from "./ToyMapper";
 import { IMapper } from "./IMapper";
 
 export class FactoryMapper {
-  public static create(category: ItemCategory): IMapper<any, any> {
+  public static create(category: ItemCategory): IMapper<unknown,unknown> {
     switch (category) {
       case ItemCategory.Book:
         return new PostgreBookMapper();

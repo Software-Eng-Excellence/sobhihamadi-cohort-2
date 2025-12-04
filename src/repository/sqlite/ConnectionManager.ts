@@ -20,8 +20,8 @@ public static async getConnection(): Promise<SqliteDatabase<Database, Statement>
         driver: Database
        });
             
-        } catch (error : unknown) {
-            throw new DatabaseConnectionException("Failed to connect to the database.", error as Error);
+        } catch  {
+            throw new DatabaseConnectionException("Failed to connect to the database.");
             
         }
       

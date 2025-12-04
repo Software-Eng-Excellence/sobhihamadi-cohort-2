@@ -13,7 +13,7 @@ export class UserController {
   
 
   public async createUser(req: Request, res: Response) {
-    this.validateCreateBody(req.body);
+    this.validateCreateBody(req);
 
     const { name, email, password } = req.body;
     const user = await this.userService.create({ name, email, password,role:toRoles('user')});
@@ -115,8 +115,8 @@ export class UserController {
     }
   }
 
-  private validateCreateBody(body: any) {
-    const { name, email, password } = body ?? {};
+  private validateCreateBody(req:Request) {
+    const { name, email, password } = req.body;
 
     if (!name || typeof name !== "string") {
       throw new BadRequestException(
@@ -142,33 +142,45 @@ export class UserController {
     }
   }
 
-  private validateUpdateBody(body: any) {
-    const { name, email, password,role } = body ?? {};
-
-    if (name !== undefined) {
-      if (typeof name !== "string" || name.trim().length === 0) {
-        throw new BadRequestException("Name must be a non-empty string", {
-          InvalidName: true,
-        });
-      }
-    }
-
-    if (email !== undefined) {
-      this.validateEmail(email);
-    }
-
-    if (password !== undefined && typeof password !== "string") {
-      throw new BadRequestException("Password must be a string", {
-        PasswordTypeInvalid: true,
-      });
-    }
-        if (role !== undefined && !Object.values(roles).includes(role)) {
-    throw new BadRequestException("Invalid role value", {
-      InvalidRole: true,
+  private validateUpdateBody(body: unknown) {
+   
+if (body === null || typeof body !== "object") {
+    throw new BadRequestException("Body must be an object", {
+      BodyInvalid: true,
     });
+  }
+
+  const { name, email, password, role } = body as {
+    name?: unknown;
+    email?: unknown;
+    password?: unknown;
+    role?: unknown;
+  };
+
+  if (name !== undefined) {
+    if (typeof name !== "string" || name.trim().length === 0) {
+      throw new BadRequestException("Name must be a non-empty string", {
+        InvalidName: true,
+      });
     }
   }
 
+  if (email !== undefined) {
+    this.validateEmail(email);
+  }
+
+  if (password !== undefined && typeof password !== "string") {
+    throw new BadRequestException("Password must be a string", {
+      PasswordTypeInvalid: true,
+    });
+  }
+
+  if (role !== undefined && !Object.values(roles).includes(role as roles)) {
+    throw new BadRequestException("Invalid role value", {
+      InvalidRole: true,
+    });
+  }
+}
 
   
 }

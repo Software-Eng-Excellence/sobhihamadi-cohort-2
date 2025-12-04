@@ -26,16 +26,16 @@ const INSERT_BOOK=`INSERT INTO book (id, bookTitle, author, genre, format,
  const UPDATE_BOOK=`UPDATE book SET bookTitle=?, author=?,
   genre=?, format=?, language=?, publisher=?, specialEdition=?, packaging=? WHERE id=?;`
 export class BookOrderRepository implements IRepository<IdentifierBook>, Initializable{
-    getbyemail(email: string): Promise<User> {
+    getbyemail(): Promise<User> {
         throw new Error("Method not implemented.");
     }
-    mapRowToUser(row: any): User {
+    mapRowToUser(): User {
         throw new Error("Method not implemented.");
     }
     async create(item: IdentifierBook): Promise<ID> {
         try {
             const conn= await ConnectionManager.getConnection();
-            const result= await conn.run(
+            await conn.run(
                 INSERT_BOOK,[   
                     item.getid(),
                     item.getBookTitle(),
@@ -48,11 +48,12 @@ export class BookOrderRepository implements IRepository<IdentifierBook>, Initial
                     item.getPackaging(),
                 ]);
             logger.info("Creating book, id=%s params=%o", item.getid());
+
             return item.getid();
         } catch (error: unknown) {
             // Log full error (sqlite message + stack) before rethrowing
             logger.error("Failed to create book order (raw): %o", error);
-            throw new DbException("Failed to create book order", error as Error);
+            throw new DbException("Failed to create book order");
         }
         
     }
@@ -66,7 +67,7 @@ export class BookOrderRepository implements IRepository<IdentifierBook>, Initial
       return new PostgreBookMapper().map(result); 
     } catch (error: unknown) {
         logger.error("failed to get book of id %s %o ", id,(error as Error).message);
-        throw new DbException("Failed to get book order", error as Error);
+        throw new DbException("Failed to get book order");
     }
     }
    async getall(): Promise<IdentifierBook[]> {
@@ -76,9 +77,9 @@ export class BookOrderRepository implements IRepository<IdentifierBook>, Initial
             const books= new PostgreBookMapper();
             return results.map((book)=> books.map(book));
 
-        } catch (error) {
+        } catch {
             logger.error("failed to get all books ");
-        throw new DbException("Failed to get all books ", error as Error);
+        throw new DbException("Failed to get all books ");
             
         }
     }
@@ -100,7 +101,7 @@ export class BookOrderRepository implements IRepository<IdentifierBook>, Initial
         } catch (error: unknown) {
             // Log full error (sqlite message + stack) before rethrowing
             logger.error("Failed to update book order (raw): %o", error);
-            throw new DbException("Failed to update book order", error as Error);
+            throw new DbException("Failed to update book order");
         }
     }
    async delete(id: ID): Promise<void> {
@@ -110,7 +111,7 @@ export class BookOrderRepository implements IRepository<IdentifierBook>, Initial
         } catch (error: unknown) {
             // Log full error (sqlite message + stack) before rethrowing
             logger.error("Failed to delete book order (raw): %o", error);
-            throw new DbException("Failed to delete book order", error as Error);
+            throw new DbException("Failed to delete book order");
            }
     }
     async init(): Promise<void> {
@@ -123,7 +124,7 @@ export class BookOrderRepository implements IRepository<IdentifierBook>, Initial
 
          catch (error: unknown) {
             logger.error("Error during book table initialization " + error as unknown as Error);
-            throw new InitializationException("Failed to initialize the database(book).", error as Error );
+            throw new InitializationException("Failed to initialize the database(book)." );
             
         }
        

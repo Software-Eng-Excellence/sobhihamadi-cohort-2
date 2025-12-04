@@ -29,7 +29,7 @@ export interface IRepository<T extends id> {
   
 
   
-  mapRowToUser(row: any): User;
+  mapRowToUser(row: User): User;
 
     /**
  * Creates a new item in the repository.

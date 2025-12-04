@@ -1,4 +1,4 @@
-import { IdentifierOrderItem, Order } from "../../model/order.model";
+import { IdentifierOrderItem } from "../../model/order.model";
 import { RepositoryFactory } from "../../repository/Repository.factory";
 import config from "../../config";
 import { ItemCategory } from "../../model/IItem";

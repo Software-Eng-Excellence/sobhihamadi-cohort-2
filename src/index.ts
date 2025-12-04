@@ -1,5 +1,5 @@
 import config from './config';
-import express, { NextFunction, Request, Response } from 'express';
+import express, {  Request, Response } from 'express';
 import logger from './util/logger';
 import helmet from 'helmet';
 import bodyParser from 'body-parser';
@@ -35,7 +35,7 @@ app.use((req, res)=>{
 });
 
 app.use('/', routes);
-app.use((err:Error, req:Request, res:Response, next:NextFunction)=>{
+app.use((err:Error, req:Request, res:Response)=>{
      if(err instanceof HTTPException){
           const HttpExceptions=err as HTTPException;
           logger.error("%s %d %s %o", HttpExceptions.name, HttpExceptions.status

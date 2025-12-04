@@ -1,12 +1,12 @@
 import { IdentifierOrderItem, Order } from "../order.model";
-import { identifierItem, IItem, ItemCategory } from "../IItem";
+import { identifierItem, IItem } from "../IItem";
 
 
   
 
 
 export class OrderBuilder {
-    [x: string]: any;
+
     private _id!: string;
     private _item!: IItem;
     private _quantity!: number;

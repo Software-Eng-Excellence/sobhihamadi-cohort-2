@@ -56,11 +56,11 @@ export class UserSqliteRepository implements IRepository<User>, Initializable {
       logger.info("User table created or already exists.");
     } catch (error: unknown) {
       logger.error("Error initializing User repository: %o", error);
-      throw new InitializationException("Failed to initialize user repository", error as Error);
+      throw new InitializationException("Failed to initialize user repository");
     }
   }
 //we can add a mapper file for user
-   mapRowToUser(row: any): User {
+   mapRowToUser(row: User): User {
     return new User({
       id: row.id,
       name: row.name,
@@ -72,12 +72,12 @@ export class UserSqliteRepository implements IRepository<User>, Initializable {
   }
 
   async create(user: User): Promise<ID> {
-    let conn: any;
+  
     try {
-      conn = await ConnectionManager.getConnection();
-      await conn.exec("BEGIN TRANSACTION;");
+      this.db = await ConnectionManager.getConnection();
+      await this.db.exec("BEGIN TRANSACTION;");
 
-      await conn.run(INSERT_SQL, [
+      await this.db.run(INSERT_SQL, [
         user.id,
         user.name,
         user.email,
@@ -86,13 +86,13 @@ export class UserSqliteRepository implements IRepository<User>, Initializable {
         
       ]);
 
-      await conn.exec("COMMIT;");
+      await this.db.exec("COMMIT;");
       return user.getid();
 
     } catch (error: unknown) {
-      if (conn) await conn.exec("ROLLBACK;");
+      if (this.db) await this.db.exec("ROLLBACK;");
       logger.error("Error creating user %s: %o", user.id, error);
-      throw new DbException("Failed to create user.", error as Error);
+      throw new DbException("Failed to create user.");
     }
   }
 
@@ -110,7 +110,7 @@ export class UserSqliteRepository implements IRepository<User>, Initializable {
     } catch (error: unknown) {
       logger.error("Error getting user %s: %o", id, error);
       if (error instanceof NotFoundException) throw error;
-      throw new DbException("Failed to get user.", error as Error);
+      throw new DbException("Failed to get user.");
     }
   }
 
@@ -118,21 +118,21 @@ export class UserSqliteRepository implements IRepository<User>, Initializable {
     try {
       const conn = await ConnectionManager.getConnection();
       const rows = await conn.all(SELECT_ALL_SQL);
-      return rows.map((r: any) => this.mapRowToUser(r));
+      return rows.map((r: User) => this.mapRowToUser(r));
 
     } catch (error: unknown) {
       logger.error("Error getting all users: %o", error);
-      throw new DbException("Failed to get all users.", error as Error);
+      throw new DbException("Failed to get all users.");
     }
   }
 
   async update(user: User): Promise<void> {
-    let conn: any;
-    try {
-      conn = await ConnectionManager.getConnection();
-      await conn.exec("BEGIN TRANSACTION;");
 
-      await conn.run(UPDATE_SQL, [
+    try {
+      this.db = await ConnectionManager.getConnection();
+      await this.db.exec("BEGIN TRANSACTION;");
+
+      await   this.db .run(UPDATE_SQL, [
         user.name,
         user.email,
         user.password,
@@ -140,47 +140,47 @@ export class UserSqliteRepository implements IRepository<User>, Initializable {
         user.id,
       ]);
 
-      await conn.exec("COMMIT;");
+      await   this.db .exec("COMMIT;");
 
     } catch (error: unknown) {
-      if (conn) await conn.exec("ROLLBACK;");
+      if (  this.db ) await   this.db .exec("ROLLBACK;");
       logger.error("Error updating user %s: %o", user.id, error);
-      throw new DbException("Failed to update user.", error as Error);
+      throw new DbException("Failed to update user.");
     }
   }
 
   async delete(id: ID): Promise<void> {
-    let conn: any;
-    try {
-      conn = await ConnectionManager.getConnection();
-      await conn.exec("BEGIN TRANSACTION;");
 
-      const result = await conn.run(DELETE_SQL, id);
+    try {
+      this.db = await ConnectionManager.getConnection();
+      await  this.db.exec("BEGIN TRANSACTION;");
+
+      const result = await  this.db.run(DELETE_SQL, id);
 
       if (result.changes === 0) {
         throw new NotFoundException(`User with id ${id} not found`);
       }
 
-      await conn.exec("COMMIT;");
+      await  this.db.exec("COMMIT;");
 
     } catch (error: unknown) {
-      if (conn) await conn.exec("ROLLBACK;");
+      if ( this.db) await  this.db.exec("ROLLBACK;");
       logger.error("Error deleting user %s: %o", id, error);
       if (error instanceof NotFoundException) throw error;
-      throw new DbException("Failed to delete user.", error as Error);
+      throw new DbException("Failed to delete user.");
     }
   }
   async getbyemail(email: string): Promise<User> {
    if(!this.db){
-    throw new DbException("Database not initialized.", 
-      new Error("Database connection is undefined"));
+    throw new DbException("Database not initialized.")
+
    }
     const SELECT_BY_EMAIL_SQL = `
     SELECT *
     FROM users
     WHERE email = ?;
 `;
-    return await this.db.get(SELECT_BY_EMAIL_SQL, email).then((row: any) => {
+    return await this.db.get(SELECT_BY_EMAIL_SQL, email).then((row: User) => {
       if (!row) {
         throw new NotFoundException(`User with email ${email} not found`);
       }

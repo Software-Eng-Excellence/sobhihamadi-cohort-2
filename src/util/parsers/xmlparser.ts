@@ -6,7 +6,7 @@ import { parseStringPromise, Builder } from 'xml2js';
  * @param filePath Path to the XML file.
  * @returns Parsed object from the XML file.
  */
-export async function readXML<T = any>(filePath: string): Promise<T> {
+export async function readXML<T = string>(filePath: string): Promise<T> {
     try {
         const fileContent = await fs.readFile(filePath, 'utf-8');
         const result = await parseStringPromise(fileContent, {
@@ -26,7 +26,7 @@ export async function readXML<T = any>(filePath: string): Promise<T> {
  * @param filePath Path to the XML file.
  * @param data Data to be converted and written.
  */
-export async function writeXML(filePath: string, data: any): Promise<void> {
+export async function writeXML(filePath: string, data: string): Promise<void> {
     try {
         const builder = new Builder({ headless: true, renderOpts: { pretty: true } });
         const xmlContent = builder.buildObject(data);

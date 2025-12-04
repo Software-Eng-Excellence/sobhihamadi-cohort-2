@@ -5,7 +5,7 @@ import { promises as fs } from 'fs';
  * @param filePath Path to the JSON file.
  * @returns Parsed object from the JSON file.
  */
-export async function readJSON<T = any>(filePath: string): Promise<T> {
+export async function readJSON<T = string>(filePath: string): Promise<T> {
     try {
         const fileContent = await fs.readFile(filePath, 'utf-8');
         return JSON.parse(fileContent) as T;
@@ -19,7 +19,7 @@ export async function readJSON<T = any>(filePath: string): Promise<T> {
  * @param filePath Path to the JSON file.
  * @param data Data to be stringified and written.
  */
-export async function writeJSON(filePath: string, data: any): Promise<void> {
+export async function writeJSON(filePath: string, data: string): Promise<void> {
     try {
         const jsonContent = JSON.stringify(data, null, 2);
         await fs.writeFile(filePath, jsonContent, 'utf-8');

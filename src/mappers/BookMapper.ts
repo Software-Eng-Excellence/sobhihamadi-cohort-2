@@ -4,10 +4,10 @@ import { bookBuilder, IdentifierBookBuilder } from "../model/builders/book.build
 
 
 export class JsonBookMapper implements IMapper<string[], Book> {
-    reverseMap(data: Book): string[] {
+    reverseMap(): string[] {
         throw new Error("Method not implemented.");
     }
-    [x: string]: any;  
+
 
     map(data: string[]): Book {
 

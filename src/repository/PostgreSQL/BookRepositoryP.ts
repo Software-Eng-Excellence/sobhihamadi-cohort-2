@@ -40,10 +40,10 @@ const INSERT_BOOK_QUERY = `INSERT INTO book
  const SELECT_BY_ID=`SELECT * FROM book WHERE id=$1;`
 
 export class BookRepositoryPostgre implements IRepository<IdentifierBook>, Initializable{
-    getbyemail(email: string): Promise<User> {
+    getbyemail(): Promise<User> {
         throw new Error("Method not implemented.");
     }
-    mapRowToUser(row: any): User {
+    mapRowToUser(): User {
         throw new Error("Method not implemented.");
     }
   
@@ -54,10 +54,15 @@ export class BookRepositoryPostgre implements IRepository<IdentifierBook>, Initi
         logger.info("PostgreSQL book table created or already exists.");
 
         }
-catch (error: unknown) {
-    logger.error("Error during PostgreSQL book table initialization " + error as unknown as Error);
-    throw new InitializationException("Failed to initialize the PostgreSQL book database.", error as Error );
-        
+
+  catch (error: unknown) {
+  console.error("ERROR IN BookRepositoryPostgre.init:", error);
+  logger.error("Error during PostgreSQL book table initialization", error as Error);
+  throw new InitializationException(
+    "Failed to initialize the PostgreSQL book database.",
+ 
+  );
+
        
     }
 }
@@ -109,15 +114,18 @@ catch (error: unknown) {
             
             const conn=await ConnectionManager.getPostgreConnection();
             await conn.query(UPDATE_BOOK,[
-                item.getAuthor(),
                 item.getBookTitle(),
-          
+                item.getAuthor(),
+                 item.getGenre(),
                 item.getFormat(),
-                item.getGenre(),
+              
                 item.getLanguage(),
-                item.getPackaging(),
+                
+               
                 item.getPublisher(),
-                item.getSpecialEdition(),
+                 item.getSpecialEdition(),
+                 item.getPackaging(),
+               
                 item.getid()
 
             ]

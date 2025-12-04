@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import config from "../config";
-import { TokenPayload, userPayload } from "../config/db_mode";
+import { userPayload } from "../config/db_mode";
 import { ExpiredTokenException, InvalidTokenException } from "../util/exceptions/http/Authenticationexceptions";
 import { serviceexception } from "../util/exceptions/http/serviceexception";
 import { Response } from "express";

@@ -33,10 +33,10 @@ const UPDATE_TOY_QUERY=`UPDATE toy SET
     const DROP_TABLE_TOYS=`DROP TABLE IF EXISTS toy;`;
 
 export class ToyPostgreRepository implements IRepository<IdentifierToy>, Initializable{
-    getbyemail(email: string): Promise<User> {
+    getbyemail(): Promise<User> {
         throw new Error("Method not implemented.");
     }
-    mapRowToUser(row: any): User {
+    mapRowToUser(): User {
         throw new Error("Method not implemented.");
     }
 
@@ -54,7 +54,7 @@ export class ToyPostgreRepository implements IRepository<IdentifierToy>, Initial
             
         } catch (error) {
             logger.error("Error during PostgreSQL toy table initialization " + error as unknown as Error);
-            throw new InitializationException("Failed to initialize the PostgreSQL toy database.", error as Error );
+            throw new InitializationException("Failed to initialize the PostgreSQL toy database." );
             
         }
         

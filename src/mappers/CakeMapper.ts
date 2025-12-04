@@ -6,7 +6,7 @@ import { IMapper } from './IMapper';
 
 
 export class CSVCakeMapper implements IMapper<string[], Cake> {
-     [x: string]: any;
+ 
 
      map(data: string[]): Cake {
 
@@ -122,9 +122,9 @@ export class SQLITECakeMapper implements IMapper<ISQliteCake, Cake> {
 
 }
 
-export class JsonRequestCakeMapper implements IMapper<any, identifierCake> {
+export class JsonRequestCakeMapper implements IMapper<ISQliteCake, identifierCake> {
    
-    map(data: any): identifierCake {
+    map(data: ISQliteCake): identifierCake {
       
         const cake = cakebuilder.newbuilder()
             .settype(data.type)
@@ -147,7 +147,7 @@ export class JsonRequestCakeMapper implements IMapper<any, identifierCake> {
             .SetCake(cake)
             .Build();
     }
-    reverseMap(data: identifierCake): any {
+    reverseMap(data: identifierCake): ISQliteCake {
         return {
             id: data.getid(),
             type: data.getType(),

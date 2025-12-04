@@ -15,7 +15,7 @@ const consoleformat = winston.format.combine(
         winston.format.splat(),
     winston.format.simple(),
     winston.format.errors({ stack: true }),
-    winston.format.printf(({ timestamp, level, message, stack }) => {
+    winston.format.printf(({ level, message, stack }) => {
         return `[s] [${level}]: ${message} ${stack || ""}` ;
   
     }

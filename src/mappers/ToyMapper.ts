@@ -4,10 +4,10 @@ import { IdentifierToyBuilder, ToyBuilder } from '../model/builders/toy.builder'
 
 
 export class XMLToyMapper implements IMapper<string[], Toy> {
-    reverseMap(data: Toy): string[] {
+    reverseMap(): string[] {
         throw new Error('Method not implemented.');
     }
-    [x: string]: any;
+   
 
     map(data: string[]): Toy {  
         return ToyBuilder.newBuilder()
@@ -46,7 +46,7 @@ export class XMLToyMapper implements IMapper<string[], Toy> {
             )
             .build()
         }
-        reverseMap(data: Toy): IToyMapper {
+        reverseMap(): IToyMapper {
             throw new Error('Method not implemented.');
         }
         

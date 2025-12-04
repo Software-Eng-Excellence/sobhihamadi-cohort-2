@@ -55,10 +55,10 @@ WHERE "id"=$15;
 
 const DELETE_CAKE_BY_ID=`DELETE FROM cake WHERE id=$1;`;
 export class CakeRepositoryPostgre implements IRepository<identifierCake>, Initializable {
-    getbyemail(email: string): Promise<User> {
+    getbyemail(): Promise<User> {
         throw new Error("Method not implemented.");
     }
-    mapRowToUser(row: any): User {
+    mapRowToUser(): User {
         throw new Error("Method not implemented.");
     }
 
@@ -71,7 +71,7 @@ async init(): Promise<void> {
 
     } catch (error: unknown) {
         logger.error("Error during PostgreSQL cake table initialization " + error as unknown as Error);
-        throw new InitializationException("Failed to initialize the PostgreSQL cake database.", error as Error );
+        throw new InitializationException("Failed to initialize the PostgreSQL cake database." );
     }}
 
 

@@ -47,10 +47,10 @@ const UPDATE_CAKE=
 
 
 export class CakeOrderRepository implements IRepository<identifierCake>, Initializable {
-    getbyemail(email: string): Promise<User> {
+    getbyemail(): Promise<User> {
         throw new Error("Method not implemented.");
     }
-    mapRowToUser(row: any): User {
+    mapRowToUser(): User {
         throw new Error("Method not implemented.");
     }
 
@@ -65,7 +65,7 @@ export class CakeOrderRepository implements IRepository<identifierCake>, Initial
 
          catch (error: unknown) {
             logger.error("Error during cake table initialization " + error as unknown as Error);
-            throw new InitializationException("Failed to initialize the database(cake).", error as Error );
+            throw new InitializationException("Failed to initialize the database(cake)." );
             
         }
        
@@ -99,7 +99,7 @@ async create(item: identifierCake): Promise<ID> {
     } catch (error: unknown) {
         // Log full error (sqlite message + stack) before rethrowing
         logger.error("Failed to create cake order (raw): %o", error);
-        throw new DbException("Failed to create cake order", error as Error);
+        throw new DbException("Failed to create cake order");
     }
 }
     async get(id: ID): Promise<identifierCake> {
@@ -112,7 +112,7 @@ async create(item: identifierCake): Promise<ID> {
       return new SQLITECakeMapper().map(result); 
     } catch (error: unknown) {
         logger.error("failed to get cake of id %s %o ", id,(error as Error).message);
-        throw new DbException("Failed to get cake order", error as Error);
+        throw new DbException("Failed to get cake order");
     }
     }
    async getall(): Promise<identifierCake[]> {
@@ -122,10 +122,10 @@ async create(item: identifierCake): Promise<ID> {
             const cakes= new SQLITECakeMapper();
             return results.map((cake)=> cakes.map(cake));
 
-        } catch (error) {
+        } catch  {
             logger.error("failed to get all cakes ");
-        throw new DbException("Failed to get all cakes ", error as Error);
-            
+        throw new DbException("Failed to get all cakes ");
+           
         }
        
     }
@@ -152,7 +152,7 @@ async create(item: identifierCake): Promise<ID> {
             
         } catch (error) {
             logger.error("Error updating cake of id %s: %o", item.getid(),(error as Error).message);
-            throw new DbException("Failed to update cake"+item.getid(), error as Error);
+            throw new DbException("Failed to update cake"+item.getid());
             
         }
        
@@ -164,7 +164,7 @@ async create(item: identifierCake): Promise<ID> {
             
         } catch (error) {
             logger.error("Error deleting cake of id %s: %o", id,(error as Error).message);
-            throw new DbException("Failed to delete cake", error as Error);
+            throw new DbException("Failed to delete cake");
             
         }
     

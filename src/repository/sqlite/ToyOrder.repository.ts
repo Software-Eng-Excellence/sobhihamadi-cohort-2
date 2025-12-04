@@ -25,10 +25,10 @@ const DELETE_TOY_BY_ID=`DELETE FROM toy WHERE id=?;`
 const UPDATE_TOY=`UPDATE toy SET type=?, ageGroup=?, brand=?, material=?, educational=?, batteryRequired=? WHERE id=?;`
 
 export class ToyOrderRepository implements IRepository<IdentifierToy>, Initializable {
-    getbyemail(email: string): Promise<User> {
+    getbyemail(): Promise<User> {
         throw new Error("Method not implemented.");
     }
-    mapRowToUser(row: any): User {
+    mapRowToUser(): User {
         throw new Error("Method not implemented.");
     }
    async  init(): Promise<void> {
@@ -41,30 +41,30 @@ export class ToyOrderRepository implements IRepository<IdentifierToy>, Initializ
 
          catch (error: unknown) {
             logger.error("Error during toy table initialization " + error as unknown as Error);
-            throw new InitializationException("Failed to initialize the database(toy).", error as Error );
+            throw new InitializationException("Failed to initialize the database(toy)." );
             
         }
     }
     async create(item: IdentifierToy): Promise<ID> {
         try {
             const conn= await ConnectionManager.getConnection();
-            const result= await conn.run(
-                INSERT_TOY,[
-                    item.getid(),
-                    item.getType(),
-                    item.getAgeGroup(),
-                    item.getBrand(),
-                    item.getMaterial(),
-                    item.getEducational(),
-                    item.getBatteryRequired(),
-                ]);
+            await conn.run(INSERT_TOY, [
+                item.getid(),
+                item.getType(),
+                item.getAgeGroup(),
+                item.getBrand(),
+                item.getMaterial(),
+                item.getEducational(),
+                item.getBatteryRequired()
+            ]);
+          
             logger.info("Creating toy, id=%s params=%o", item.getid());
 
         return item.getid();
     } catch (error: unknown) {
         // Log full error (sqlite message + stack) before rethrowing
         logger.error("Failed to create toy order (raw): %o", error);
-        throw new DbException("Failed to create toy order", error as Error);
+        throw new DbException("Failed to create toy order");
     }
 
     }
@@ -78,7 +78,7 @@ export class ToyOrderRepository implements IRepository<IdentifierToy>, Initializ
       return new PostgreToyMapper().map(result); 
     } catch (error: unknown) {
         logger.error("failed to get toy of id %s %o ", id,(error as Error).message);
-        throw new DbException("Failed to get toy order", error as Error);
+        throw new DbException("Failed to get toy order");
     }
     }
     async getall(): Promise<IdentifierToy[]> {
@@ -88,9 +88,9 @@ export class ToyOrderRepository implements IRepository<IdentifierToy>, Initializ
             const cakes= new PostgreToyMapper();
             return results.map((cake)=> cakes.map(cake));
 
-        } catch (error) {
+        } catch  {
             logger.error("failed to get all toys ");
-        throw new DbException("Failed to get all toys ", error as Error);
+        throw new DbException("Failed to get all toys ");
             
         }
     }
@@ -109,7 +109,7 @@ export class ToyOrderRepository implements IRepository<IdentifierToy>, Initializ
        } catch (error: unknown) {
         // Log full error (sqlite message + stack) before rethrowing
         logger.error("Failed to update toy order (raw): %o", error);
-        throw new DbException("Failed to update toy order", error as Error);
+        throw new DbException("Failed to update toy order");
        }
     }
   async  delete(id: ID): Promise<void> {
@@ -119,7 +119,7 @@ export class ToyOrderRepository implements IRepository<IdentifierToy>, Initializ
         } catch (error: unknown) {
             // Log full error (sqlite message + stack) before rethrowing
             logger.error("Failed to delete toy order (raw): %o", error);
-            throw new DbException("Failed to delete toy order", error as Error);
+            throw new DbException("Failed to delete toy order");
            }
     }
     

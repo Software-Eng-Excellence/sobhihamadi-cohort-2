@@ -1,11 +1,11 @@
 import { identifierOrderItem } from "model/IOrder";
-import { ID, Initializable, IRepository, IRepositoryWithInit } from "repository/IRepository";
+import { ID, Initializable, IRepository } from "repository/IRepository";
 import { ConnectionManager } from "./ConnectionManager";
 import logger from "../../util/logger";
 import { DbException, InitializationException } from "../../util/exceptions/repositoryExceptions";
 import { identifierItem } from "model/IItem";
 import { ISQLITEOrderData, SQLITEOrderMapper } from "../../mappers/OrderMapper";
-import { IdentifierOrderItem, Order } from "model/order.model";
+import { IdentifierOrderItem } from "model/order.model";
 import { User } from "model/user.model";
 
 const INSERT_ORDER = `
@@ -42,11 +42,11 @@ export class OrderRepository implements IRepository<identifierOrderItem>, Initia
     private readonly itemrepository: IRepository<identifierItem> & Initializable
   ) {}
 
-  getbyemail(email: string): Promise<User> {
+  getbyemail(): Promise<User> {
     throw new Error("Method not implemented.");
   }
 
-  mapRowToUser(row: any): User {
+  mapRowToUser(): User {
     throw new Error("Method not implemented.");
   }
 
@@ -81,7 +81,7 @@ export class OrderRepository implements IRepository<identifierOrderItem>, Initia
         }
       }
       logger.error("Error in OrderRepository.create: %o", error);
-      throw new DbException("Failed to create item in the database.", error as Error);
+      throw new DbException("Failed to create item in the database.");
     }
   }
 
@@ -99,7 +99,7 @@ export class OrderRepository implements IRepository<identifierOrderItem>, Initia
       return new SQLITEOrderMapper().map({ data: result, item: cake });
     } catch (error: unknown) {
       logger.error("Error getting order of id %s %o", id, (error as Error).message);
-      throw new DbException("Failed to get order of id", error as Error);
+      throw new DbException("Failed to get order of id");
     }
   }
 
@@ -120,7 +120,7 @@ export class OrderRepository implements IRepository<identifierOrderItem>, Initia
         if (!foundItem) {
           throw new DbException(
             `Item with id ${order.item} not found for order ${order.id}`,
-            new Error("Data inconsistency")
+           
           );
         }
         return { order, foundItem };
@@ -134,7 +134,7 @@ export class OrderRepository implements IRepository<identifierOrderItem>, Initia
       return identifierOrders;
     } catch (error) {
       logger.error("Error getting all orders: %o", (error as Error).message);
-      throw new DbException("Failed to get all orders", error as Error);
+      throw new DbException("Failed to get all orders");
     }
   }
 
@@ -165,7 +165,7 @@ export class OrderRepository implements IRepository<identifierOrderItem>, Initia
         }
       }
       logger.error("Error updating order of id %s: %o", order.getid(), (error as Error).message);
-      throw new DbException("Failed to update order", error as Error);
+      throw new DbException("Failed to update order");
     }
   }
 
@@ -188,7 +188,7 @@ export class OrderRepository implements IRepository<identifierOrderItem>, Initia
         }
       }
       logger.error("Error deleting order of id %s: %o", id, (error as Error).message);
-      throw new DbException("Failed to delete order", error as Error);
+      throw new DbException("Failed to delete order");
     }
   }
 
@@ -204,7 +204,7 @@ export class OrderRepository implements IRepository<identifierOrderItem>, Initia
       logger.error("Error during database initialization: %o", error as Error);
       throw new InitializationException(
         "Failed to initialize the database.",
-        error as Error
+  
       );
     }
   }

@@ -1,5 +1,5 @@
 import { IMapper } from "./IMapper";
-import { IdentifierOrderItem, Order } from "../model/order.model";
+import { IdentifierOrderItem} from "../model/order.model";
 import { identifierOrderItemBuilder, OrderBuilder } from "../model/builders/Order.builder";
 import { identifierItem, IItem } from "../model/IItem";
 import { IOrder } from "model/IOrder";
@@ -80,14 +80,14 @@ interface IJsonOrder {
     price: number;
 }
 
-export class JsonRequestOrderMapper implements IMapper<any, IdentifierOrderItem> {
-    constructor(private itemMapper: IMapper<any, identifierItem>) {
+export class JsonRequestOrderMapper implements IMapper<IJsonOrder, IdentifierOrderItem> {
+    constructor(private itemMapper: IMapper<IJsonItem, identifierItem>) {
 
     }
 
-    map(data: any): IdentifierOrderItem {
+    map(data: IJsonOrder): IdentifierOrderItem {
         //extract item and build identifierItem
-        const item= this.itemMapper.map(data.IdentifierItem);
+        const item= this.itemMapper.map(data.item);
 
         //extract order and build identifierOrder
         const order = OrderBuilder.NewBuilder()
@@ -101,11 +101,14 @@ export class JsonRequestOrderMapper implements IMapper<any, IdentifierOrderItem>
             .setItem(item)
             .build();
     }
-    reverseMap(data: IdentifierOrderItem): any {
+    reverseMap(data: IdentifierOrderItem): IJsonOrder {
+        const itemJson: IJsonItem = this.itemMapper.reverseMap(data.getItem());
         return {
-            
-             ...data
-        };
+        id: data.getid(),
+        item: itemJson,
+        quantity: data.getQuantity(),
+        price: data.getPrice(),
+    };
     }
 
 
