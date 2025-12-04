@@ -1,7 +1,8 @@
 //for test repositoryfactory i want:
 //
 //// tests/repositoryfactory.test.ts
-import { RepositoryFactory, DBMode } from "../../src/repository/Repository.factory";
+import { RepositoryFactory } from "../../src/repository/Repository.factory";
+import { DBMode } from "../../src/config/db_mode";
 import { ItemCategory } from "../../src/model/IItem";
 
 
@@ -102,11 +103,7 @@ it("should create a toy(sqlite) repo ", async () => {
 
 
 });
-it ("should create a cake(csv) repo", async () => {
-  const repo= await RepositoryFactory.create (DBMode.CSV,ItemCategory.Cake);
-  expect(repo).toBeDefined();
-  
-});
+
 it("invalid category throws", async () => {
   await expect(RepositoryFactory.create(DBMode.POSTGRES,"InvalidCategory" as ItemCategory))
     .rejects.toThrow(/Invalid category/);

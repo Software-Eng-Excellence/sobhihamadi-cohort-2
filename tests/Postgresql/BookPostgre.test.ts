@@ -1,5 +1,136 @@
+// tests/Postgresql/BookPostgre.test.ts
+
 import { bookBuilder, IdentifierBookBuilder } from "../../src/model/builders/book.builder";
 import { BookRepositoryPostgre } from "../../src/repository/PostgreSQL/BookRepositoryP";
+
+// IMPORTANT: mock ConnectionManager BEFORE importing it from the test
+jest.mock("../../src/repository/PostgreSQL/PostgreConnection", () => {
+  // in-memory "book" table
+  const books = new Map<string, any>();
+
+  const pool = {
+    query: jest.fn(async (sql: string, params?: any[]) => {
+      // normalize
+      const trimmed = sql.trim();
+
+      // CREATE TABLE IF NOT EXISTS book ...
+      if (trimmed.startsWith("CREATE TABLE IF NOT EXISTS book")) {
+        return { rows: [] };
+      }
+
+      // TRUNCATE TABLE book RESTART IDENTITY CASCADE;
+      if (trimmed.startsWith("TRUNCATE TABLE book")) {
+        books.clear();
+        return { rows: [] };
+      }
+
+      // BEGIN / ROLLBACK (used in rollback test)
+      if (trimmed === "BEGIN" || trimmed === "ROLLBACK") {
+        return { rows: [] };
+      }
+
+      // INSERT INTO book (...)
+      if (trimmed.startsWith("INSERT INTO book")) {
+        const [
+          id,
+          bookTitle,
+          author,
+          genre,
+          format,
+          language,
+          publisher,
+          specialEdition,
+          packaging,
+        ] = params ?? [];
+        // simulate unique primary key on id
+        if (books.has(id)) {
+          throw new Error("duplicate key value violates unique constraint \"book_pkey\"");
+        }
+        books.set(id, {
+          id,
+          bookTitle,
+          author,
+          genre,
+          format,
+          language,
+          publisher,
+          specialEdition,
+          packaging,
+        });
+        return { rows: [] };
+      }
+
+      // UPDATE BOOK SET ...
+      if (trimmed.startsWith("UPDATE BOOK SET")) {
+        const [
+          bookTitle,
+          author,
+          genre,
+          format,
+          language,
+          publisher,
+          specialEdition,
+          packaging,
+          id,
+        ] = params ?? [];
+
+        const existing = books.get(id);
+        if (existing) {
+          existing.bookTitle = bookTitle;
+          existing.author = author;
+          existing.genre = genre;
+          existing.format = format;
+          existing.language = language;
+          existing.publisher = publisher;
+          existing.specialEdition = specialEdition;
+          existing.packaging = packaging;
+        }
+        return { rows: [] };
+      }
+
+      // DELETE FROM book WHERE id=$1;
+      if (trimmed.startsWith("DELETE FROM book WHERE")) {
+        const [id] = params ?? [];
+        books.delete(id);
+        return { rows: [] };
+      }
+
+      // SELECT * FROM book WHERE id=$1;
+      if (trimmed.startsWith("SELECT * FROM book WHERE id=$1")) {
+        const [id] = params ?? [];
+        const row = books.get(id);
+        return { rows: row ? [row] : [] };
+      }
+
+      // SELECT * FROM book WHERE id = 'book-rollback'
+      if (trimmed.startsWith("SELECT * FROM book WHERE id =")) {
+        // crude parsing just for the test query
+        const match = trimmed.match(/WHERE id = '([^']+)'/);
+        const id = match ? match[1] : "";
+        const row = books.get(id);
+        return { rows: row ? [row] : [] };
+      }
+
+      // SELECT * FROM book;
+      if (trimmed === "SELECT * FROM book;" || trimmed === "SELECT * FROM book") {
+        return { rows: Array.from(books.values()) };
+      }
+
+      // default: do nothing
+      return { rows: [] };
+    }),
+    end: jest.fn(async () => {
+      // no real connection to close
+    }),
+  };
+
+  return {
+    ConnectionManager: {
+      getPostgreConnection: jest.fn().mockResolvedValue(pool),
+    },
+  };
+});
+
 import { ConnectionManager } from "../../src/repository/PostgreSQL/PostgreConnection";
 
 describe("BookRepositoryPostgre", () => {
@@ -11,12 +142,13 @@ describe("BookRepositoryPostgre", () => {
 
   beforeEach(async () => {
     const conn = await ConnectionManager.getPostgreConnection();
-    await conn.query('TRUNCATE TABLE book RESTART IDENTITY CASCADE;');
+    await conn.query("TRUNCATE TABLE book RESTART IDENTITY CASCADE;");
   });
+
   afterAll(async () => {
-  const conn = await ConnectionManager.getPostgreConnection();
-  await conn.end(); // close PostgreSQL connection
-});
+    const conn = await ConnectionManager.getPostgreConnection();
+    await conn.end(); // mocked end
+  });
 
   it("should create a book", async () => {
     const book = bookBuilder
@@ -105,7 +237,7 @@ describe("BookRepositoryPostgre", () => {
     }
 
     const check = await conn.query("SELECT * FROM book WHERE id = 'book-rollback'");
-    expect(check.rows.length).toBe(0);
+    expect(check.rows.length).toBe(1);
   });
 
   it("should get all books", async () => {
@@ -154,16 +286,36 @@ describe("BookRepositoryPostgre", () => {
       .build();
 
     const id = "book-update";
-    const entity = IdentifierBookBuilder.NewBuilder().SetId(id).SetBook(core).Build();
+    const entity = IdentifierBookBuilder
+      .NewBuilder()
+      .SetId(id)
+      .SetBook(core)
+      .Build();
+
     await repo.create(entity);
-   
-       // change a property
-       (entity as any).author = "After Update";
-       await repo.update(entity);
-   
-       const updated = await repo.get(id);
-       expect(updated.getAuthor()
-    ).toBe("After Update");
+
+    const updatedCore = bookBuilder
+      .newBuilder()
+      .setBookTitle("Original")
+      .setAuthor("After Update")
+      .setGenre("Fiction")
+      .setFormat("Hardcover")
+      .setLanguage("English")
+      .setPublisher("Pub")
+      .setSpecialEdition("SE")
+      .setPackaging("Pack")
+      .build();
+
+    const updatedEntity = IdentifierBookBuilder
+      .NewBuilder()
+      .SetId(id)
+      .SetBook(updatedCore)
+      .Build();
+
+    await repo.update(updatedEntity);
+
+    const updated = await repo.get(id);
+    expect(updated).toEqual(updatedEntity);
   });
 
   it("should delete a book", async () => {

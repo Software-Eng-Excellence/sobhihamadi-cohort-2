@@ -1,21 +1,21 @@
 import { ItemCategory } from '../../src/model/IItem';
-import { OrderManagementServer } from '../../src/services/ordermanagement.server';
-import { OrderVolumeAnalyticsServer } from '../../src/services/OrderVolumeAnalytics.server';
+import { OrderManagementService } from '../../src/services/OrderManagement/ordermanagement.server';
+import { OrderVolumeAnalyticsService } from '../../src/services/OrderManagement/OrderVolumeAnalytics.server';
 
 
 
 
-jest.mock('../../src/services/ordermanagement.server.ts');
-let orderVolumeAnalyticsServer: OrderVolumeAnalyticsServer;
-    let ordermanagementServerMock: jest.Mocked<OrderManagementServer>;
+jest.mock('../../src/services/OrderManagement/ordermanagement.server.ts');
+let orderVolumeAnalyticsServer: OrderVolumeAnalyticsService;
+    let ordermanagementServerMock: jest.Mocked<OrderManagementService>;
 
 describe('OrderVolumeAnalyticsServer', () => {
     
 
 
     beforeEach(() => {
-        ordermanagementServerMock = new OrderManagementServer() as jest.Mocked<OrderManagementServer>;
-        orderVolumeAnalyticsServer = new OrderVolumeAnalyticsServer(ordermanagementServerMock);
+        ordermanagementServerMock = new OrderManagementService() as jest.Mocked<OrderManagementService>;
+        orderVolumeAnalyticsServer = new OrderVolumeAnalyticsService(ordermanagementServerMock);
     });
 
     afterEach(() => {
@@ -54,18 +54,27 @@ describe('OrderVolumeAnalyticsServer', () => {
   describe('getOrderCountsByCategory', () => {
         it('should count orders by category', async () => {
             // Arrange
-            const mockOrders = [
-                { getItem: () => ({ getCategory: () => ItemCategory.Cake }) },
-                { getItem: () => ({ getCategory: () => ItemCategory.Book }) },
-                { getItem: () => ({ getCategory: () => ItemCategory.Cake }) }
-            ] as any;
+           const mockOrders = [
+    {
+      getItem: () => ({ getCategory: () => ItemCategory.Cake }),
+      getPrice: () => 100,
+      getQuantity: () => 2,
+      getid: () => 'order-1',
+    },
+    {
+      getItem: () => ({ getCategory: () => ItemCategory.Book }),
+      getPrice: () => 50,
+      getQuantity: () => 3,
+      getid: () => 'order-2',
+    },
+  ];
             ordermanagementServerMock.listOrders.mockResolvedValue(mockOrders);
 
             // Act
             const result = await orderVolumeAnalyticsServer.getOrderCountsByCategory();
 
             // Assert
-            expect(result.get(ItemCategory.Cake)).toBe(2);
+            expect(result.get(ItemCategory.Cake)).toBe(1);
             expect(result.get(ItemCategory.Book)).toBe(1);
         });
           it('should return empty map when no orders', async () => {

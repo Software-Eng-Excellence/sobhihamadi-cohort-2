@@ -1,6 +1,8 @@
 import { ItemCategory } from "../../model/IItem";
 import { OrderManagementService } from "./ordermanagement.server";
 import { BadRequestException } from "../../util/exceptions/http/BadRequestException";
+import { Order } from "model/order.model";
+import { identifierOrderItem } from "model/IOrder";
 
 
 
@@ -45,7 +47,7 @@ export class RevenueAnalyticsService {
 
    
 
-    private validateAnalyticsOrder(order: any): void {
+    private validateAnalyticsOrder(order: identifierOrderItem): void {
   const missingItem = !order.getItem();
   const missingCategory = missingItem ? true : !order.getItem().getCategory();
   const invalidPrice = order.getPrice() == null || isNaN(order.getPrice());
@@ -57,7 +59,7 @@ export class RevenueAnalyticsService {
       MissingCategory: missingCategory,
       InvalidPrice: invalidPrice,
       InvalidQuantity: invalidQuantity,
-      OrderId: order?.getId?.()
+      OrderId: order?.getid?.(),
     };
     throw new BadRequestException("Invalid order data for analytics", details);
 

@@ -1,3 +1,4 @@
+import { identifierOrderItem } from "model/IOrder";
 import { BadRequestException } from "../../util/exceptions/http/BadRequestException";
 import { OrderManagementService } from "./ordermanagement.server";
 import { OrderVolumeAnalyticsService } from "./OrderVolumeAnalytics.server";
@@ -69,7 +70,7 @@ public async getPriceRangeDistribution(): Promise<{
 }
 
 
-  private validateAnalyticsOrder(order: any): void {
+  private validateAnalyticsOrder(order: identifierOrderItem): void {
     const missingItem = !order.getItem();
     const missingCategory = missingItem ? true : !order.getItem().getCategory();
     const invalidPrice = order.getPrice() == null || isNaN(order.getPrice());

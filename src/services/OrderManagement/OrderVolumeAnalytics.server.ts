@@ -1,6 +1,7 @@
 import { ItemCategory } from "../../model/IItem";
 import { OrderManagementService } from "./ordermanagement.server";
 import { BadRequestException } from "../../util/exceptions/http/BadRequestException";
+import { identifierOrderItem } from "model/IOrder";
 
 
 
@@ -31,7 +32,7 @@ export class OrderVolumeAnalyticsService {
         
     }
 
-     private validateAnalyticsOrder(order: any): void {
+     private validateAnalyticsOrder(order: identifierOrderItem): void {
 
     const missingItem = !order.getItem();
     const missingCategory = missingItem ? true : !order.getItem().getCategory();
@@ -48,7 +49,7 @@ export class OrderVolumeAnalyticsService {
         MissingCategory: missingCategory,
         InvalidPrice: invalidPrice,
         InvalidQuantity: invalidQuantity,
-        OrderId: order?.getId?.(),
+        OrderId: order?.getid?.(),
       };
 
       throw new BadRequestException(
