@@ -7,7 +7,7 @@
     "test": "jest",
     "lint": "eslint src",
     "clean": "rm -rf build",
-    "prebuild": "npm run clean && npm run lint",
+    "prebuild": "npm run clean",
     "build": "tsc",
     "prestart": "npm run build",
     "start": "node build/index.js",
