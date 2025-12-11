@@ -9,7 +9,6 @@
     "clean": "rm -rf build",
     "prebuild": "npm run clean",
     "build": "tsc",
-    "prestart": "npm run build",
     "start": "node build/index.js",
     "dev": "ts-node-dev --respawn src/index.ts"
   },
