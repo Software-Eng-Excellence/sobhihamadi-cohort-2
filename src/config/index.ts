@@ -15,12 +15,12 @@ export default  {
 },
 
 sqlite:{
-  orders:'src/data/data/orders.db'
+  orders:  process.env.SQL_DATABASE_URL||'src/data/data/orders.db'
 
 
 },
 postgres:{
-  url: process.env.DATABASE_URL || 'postgresql://USER:PASSWORD@HOST:PORT/DB?sslmode=require',
+  url: process.env.DATABASE_URL || 'postgresql://neondb_owner:npg_sAkJNoWI37Tv@ep-silent-violet-ag127b62-pooler.c-2.eu-central-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require',
 }
 },
 port: process.env.PORT ? parseInt(process.env.PORT) : 3000, // Server port
