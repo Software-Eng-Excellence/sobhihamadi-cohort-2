@@ -1,3 +1,12 @@
+process.on('uncaughtException', err => {
+     console.error('Uncaught Exception',err);
+})
+process.on('unhandledRejection', err => {
+     console.error('Unhandled Rejection',err);
+})
+
+
+
 import config from './config';
 import express, {  Request, Response } from 'express';
 import logger from './util/logger';
@@ -8,6 +17,7 @@ import requestLogger from './middleware/requestLogger';
 import routes from './routes';
 import cookieParser from 'cookie-parser'
 import { HTTPException } from './util/exceptions/http/HttpExceptions';
+import { error } from 'console';
 const app=express();
 
 //config helmet
