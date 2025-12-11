@@ -5,9 +5,10 @@ const {logDir, isDev} = config
 
 const logfileformat = winston.format.combine(
     winston.format.timestamp({format: 'HH:mm:ss'}),
-    winston.format.json(),
+
     winston.format.splat(),
     winston.format.errors({ stack: true }),
+        winston.format.json(),
 );
 const consoleformat = winston.format.combine(
     winston.format.colorize(),
@@ -44,6 +45,12 @@ if (isDev) {
         format: consoleformat,
         level: 'debug'  , 
     }))
-};
+}
+if(config.isProduction){
+    logger.add(new winston.transports.Console({
+        format: consoleformat,
+        level: 'info', 
+    }))
+}
     logger.info("Logger initialized")
 export default logger;
