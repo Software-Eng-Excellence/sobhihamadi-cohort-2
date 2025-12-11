@@ -53,7 +53,7 @@ export class UserSqliteRepository implements IRepository<User>, Initializable {
       this.db = await ConnectionManager.getConnection();
       await this.db.exec(CREATE_TABLE_SQL);
 
-      logger.info("User table created or already exists.");
+      
     } catch (error: unknown) {
       logger.error("Error initializing User repository: %o", error);
       throw new InitializationException("Failed to initialize user repository");
