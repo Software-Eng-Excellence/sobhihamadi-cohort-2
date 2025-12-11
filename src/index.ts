@@ -54,7 +54,7 @@ app.use((err:Error, req:Request, res:Response)=>{
 });
 
 app.listen(config.port, config.host,()=>{
- 
+ console.log('Server is running on http:// %s:%d',config.host,config.port);
     logger.info('Server is running on http:// %s:%d',config.host,config.port);
 
 });

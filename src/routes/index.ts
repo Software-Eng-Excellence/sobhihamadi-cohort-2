@@ -4,9 +4,9 @@ import AnalyticsRoutes from "./analytics.route";
 import UserRoutes from "./users.route";
 import authRoutes from "./auth.route";
 import { Authentication } from "../middleware/auth";
-import logger from "util/logger";
-import { ConnectionManager as PostgreConnection } from "repository/PostgreSQL/PostgreConnection";
-import { ConnectionManager as SqliteConnection } from "repository/sqlite/ConnectionManager";
+import logger from "../util/logger";
+import { ConnectionManager as PostgreConnection } from "../repository/PostgreSQL/PostgreConnection";
+import { ConnectionManager as SqliteConnection } from "../repository/sqlite/ConnectionManager";
 
 const routes=Router();
 
@@ -15,6 +15,7 @@ routes.use('/orders',Authentication,OrderRoutes);
 routes.use('/analytics', Authentication,AnalyticsRoutes)
 routes.use("/users" ,UserRoutes);
 routes.use('/auth', authRoutes);
+logger.info('routes loaded,/orders, /analytics, /users, /auth');
 
 routes.get('/health/status', (req, res:Response) => {
     res.status(200).json({ status: 'OK',message:'Application is healthy' });
@@ -43,6 +44,7 @@ const pgUp   = PostgreConnection.getPostgreConnection().then(() => true).catch((
 return Promise.any([sqlUp, pgUp]); 
 
 }
+logger.info('routes loaded,/health/status, /health/db');
 
 
 export default routes;

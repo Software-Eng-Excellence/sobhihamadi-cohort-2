@@ -45,5 +45,5 @@ if (isDev) {
         level: 'debug'  , 
     }))
 };
-    console.log("Logger initialized")
+    logger.info("Logger initialized")
 export default logger;
