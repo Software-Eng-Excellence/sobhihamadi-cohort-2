@@ -2,7 +2,7 @@ import dotenv  from "dotenv";
 import path from "path";
 import { DBMode } from "../config/db_mode";
 import type { StringValue } from "ms";
-dotenv.config({path:path.join(__dirname,'../../.env')}); // Load environment variables from .env file
+dotenv.config({path:path.join(__dirname,`../../.env.${process.env.NODE_ENV}`)}); // Load environment variables from .env file
 
 export default  {
   logDir: process.env.LOG_DIR || './logs', // Directory for log files

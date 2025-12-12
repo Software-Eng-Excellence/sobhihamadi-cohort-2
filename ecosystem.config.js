@@ -1,0 +1,18 @@
+module.exports = {
+  apps : [{
+    name   : "se2",
+    script : "./build/index.js",
+    exec_mode:"fork",
+    instances:1,
+    env:{
+      NODE_ENV:"development"
+    },
+    env_production:{
+        NODE_ENV:"production"
+},
+   env_stage:{
+        NODE_ENV:"stage"
+}
+
+}]
+};
