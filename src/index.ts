@@ -17,7 +17,6 @@ import requestLogger from './middleware/requestLogger';
 import routes from './routes';
 import cookieParser from 'cookie-parser'
 import { HTTPException } from './util/exceptions/http/HttpExceptions';
-import { error } from 'console';
 const app=express();
 
 //config helmet
