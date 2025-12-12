@@ -4,7 +4,7 @@
 
 echo " 🚀 Starting the app in pm2"
 
-cd ~/SE2 || exit
+cd ~/sobhihamadi-cohort-2 || exit
 pm2 start ecosystem.config.js --env production
 
 # Save the pm2 process list
