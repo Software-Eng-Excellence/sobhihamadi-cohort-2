@@ -186,8 +186,8 @@ check_application_files() {
         record_check "Data Directory" "PASS" "Directory exists"
 
         # Check database file
-        if [[ -f "src/data/orders.db" ]]; then
-            local db_size=$(ls -lh "src/data/orders.db" | awk '{print $5}')
+        if [[ -f "db" ]]; then
+            local db_size=$(ls -lh "db" | awk '{print $5}')
             record_check "Database File" "PASS" "Size: $db_size"
         else
             record_check "Database File" "WARN" "Database file not found"

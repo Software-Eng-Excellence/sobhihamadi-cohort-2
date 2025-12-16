@@ -20,6 +20,9 @@ logger.info('routes loaded,/orders, /analytics, /users, /auth');
 routes.get('/health/status', (req, res:Response) => {
     res.status(200).json({ status: 'OK',message:'Application is healthy' });
 });
+routes.get('/greet', (req, res:Response) => {
+    res.status(200).json({ message: 'Hello, World!' });
+})
 
 routes.get('/health/db', async (req, res:Response) => {
     try {
