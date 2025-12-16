@@ -155,7 +155,7 @@ check_application_files() {
         "package.json"
         "ecosystem.config.js"
         "build/index.js"
-        "build/app.js"
+
     )
 
     for file in "${essential_files[@]}"; do

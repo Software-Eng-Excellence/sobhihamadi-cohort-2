@@ -176,7 +176,7 @@ verify_backup() {
     fi
 
     # Check if essential files exist
-    local essential_files=("index.js" "app.js")
+    local essential_files=("index.js")
     for file in "${essential_files[@]}"; do
         if [[ ! -f "$backup_path/$file" ]]; then
             log_error "Essential file missing in backup: $file"
