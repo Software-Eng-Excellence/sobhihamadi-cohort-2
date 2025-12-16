@@ -196,7 +196,8 @@ check_status() {
 
 # Usage function
 show_usage() {
-    cat << EOF
+
+    
 🚀 SE2 Deployment Orchestrator
 
 Usage: $0 [COMMAND] [OPTIONS]
@@ -223,3 +224,4 @@ Examples:
   $0 status             # Check current status
   $0 logs --tail        # Show recent logs
 
+}
