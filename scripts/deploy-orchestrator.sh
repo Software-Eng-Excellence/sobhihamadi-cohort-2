@@ -1,102 +1,3 @@
-#!/bin/bash
-
-# =============================================================================
-# 🎯 SE2 Deployment Orchestrator
-# =============================================================================
-# Master script that orchestrates the entire deployment pipeline
-# Author: Deployment Automation System
-# Version: 1.0.0
-# =============================================================================
-
-set -euo pipefail
-
-# Get the absolute path of the script directory
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
-APP_DIR="$(cd "${SCRIPT_DIR}/.." &> /dev/null && pwd)"
-
-# Colors and Emojis
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-PURPLE='\033[0;35m'
-CYAN='\033[0;36m'
-WHITE='\033[1;37m'
-NC='\033[0m'
-
-# Configuration
-DEPLOYMENT_ID="deploy_$(date +%Y%m%d_%H%M%S)"
-LOG_FILE="${APP_DIR}/logs/deployment_${DEPLOYMENT_ID}.log"
-LOCK_FILE="/tmp/se2_deployment.lock"
-MAX_DEPLOYMENT_TIME=600  # 10 minutes
-
-# Logging functions
-log_info() {
-    local msg="$1"
-    echo -e "${BLUE}ℹ️  INFO:${NC} $msg" | tee -a "$LOG_FILE"
-}
-
-log_success() {
-    local msg="$1"
-    echo -e "${GREEN}✅ SUCCESS:${NC} $msg" | tee -a "$LOG_FILE"
-}
-
-log_warning() {
-    local msg="$1"
-    echo -e "${YELLOW}⚠️  WARNING:${NC} $msg" | tee -a "$LOG_FILE"
-}
-
-log_error() {
-    local msg="$1"
-    echo -e "${RED}❌ ERROR:${NC} $msg" | tee -a "$LOG_FILE"
-}
-
-log_step() {
-    local msg="$1"
-    echo -e "${PURPLE}🔄 STEP:${NC} $msg" | tee -a "$LOG_FILE"
-}
-
-log_header() {
-    local msg="$1"
-    echo -e "${CYAN}================================${NC}" | tee -a "$LOG_FILE"
-    echo -e "${WHITE}$msg${NC}" | tee -a "$LOG_FILE"
-    echo -e "${CYAN}================================${NC}" | tee -a "$LOG_FILE"
-}
-
-# Cleanup function
-cleanup() {
-    local exit_code=$?
-
-    log_info "Cleaning up deployment process..."
-
-    # Remove lock file
-    if [[ -f "$LOCK_FILE" ]]; then
-        rm -f "$LOCK_FILE"
-        log_info "Removed deployment lock"
-    fi
-
-    # Kill any background processes
-    if [[ -n "${TIMEOUT_PID:-}" ]]; then
-        kill "$TIMEOUT_PID" 2>/dev/null || true
-    fi
-
-    if [[ $exit_code -ne 0 ]]; then
-        log_error "Deployment failed with exit code $exit_code"
-        log_info "Check the log file: $LOG_FILE"
-
-        # Send failure notification
-        if command -v wall >/dev/null 2>&1; then
-            echo "🚨 SE2 deployment failed! Check $LOG_FILE for details." | wall 2>/dev/null || true
-        fi
-    fi
-
-    exit $exit_code
-}
-
-# Set up signal handlers
-trap cleanup EXIT
-trap 'log_error "Deployment interrupted by user"; exit 130' INT TERM
-
 # Function to check for deployment lock
 check_lock() {
     if [[ -f "$LOCK_FILE" ]]; then
@@ -183,7 +84,7 @@ run_step() {
 
         if [[ "$is_critical" == "true" ]]; then
             log_error "Critical step failed, aborting deployment"
-            return $exit_code
+            exit $exit_code
         else
             log_warning "Non-critical step failed, continuing deployment"
             return 0
@@ -210,11 +111,21 @@ main_deployment() {
     validate_environment
 
     # Run deployment steps
-    run_step "Pre-deployment hooks" "${SCRIPT_DIR}/pre-deploy-hook.sh" true
+    local step_exit_code
+    step_exit_code=$(run_step "Pre-deployment hooks" "${SCRIPT_DIR}/pre-deploy-hook.sh" true)
+    if [[ $step_exit_code -ne 0 ]]; then
+        exit $step_exit_code
+    fi
 
-    run_step "Main deployment" "${SCRIPT_DIR}/deploy.sh deploy" true
+    step_exit_code=$(run_step "Main deployment" "${SCRIPT_DIR}/deploy.sh deploy" true)
+    if [[ $step_exit_code -ne 0 ]]; then
+        exit $step_exit_code
+    fi
 
-    run_step "Post-deployment hooks" "${SCRIPT_DIR}/post-deploy-hook.sh" false
+    step_exit_code=$(run_step "Post-deployment hooks" "${SCRIPT_DIR}/post-deploy-hook.sh" false)
+    if [[ $step_exit_code -ne 0 ]]; then
+        exit $step_exit_code
+    fi
 
     # Final success message
     log_header "🎉 DEPLOYMENT COMPLETED SUCCESSFULLY"
@@ -243,7 +154,11 @@ quick_deployment() {
     create_lock
     setup_timeout
 
-    run_step "Quick deployment" "${SCRIPT_DIR}/deploy.sh deploy" true
+    local step_exit_code
+    step_exit_code=$(run_step "Quick deployment" "${SCRIPT_DIR}/deploy.sh deploy" true)
+    if [[ $step_exit_code -ne 0 ]]; then
+        exit $step_exit_code
+    fi
 
     log_success "Quick deployment completed"
 }
@@ -256,10 +171,9 @@ check_status() {
     if [[ -f "$LOCK_FILE" ]]; then
         local lock_pid
         lock_pid=$(cat "$LOCK_FILE" 2>/dev/null || echo "")
-
         if [[ -n "$lock_pid" ]] && kill -0 "$lock_pid" 2>/dev/null; then
             log_info "Deployment is currently running (PID: $lock_pid)"
-            return 1
+            exit 1
         else
             log_info "No active deployment found"
         fi
@@ -274,10 +188,10 @@ check_status() {
     log_info "Recent deployments:"
     find "${APP_DIR}/logs" -name "deployment_*.log" -mtime -7 2>/dev/null | \
         sort -r | head -5 | while read -r logfile; do
-        local deploy_date
-        deploy_date=$(stat -c %y "$logfile" 2>/dev/null || stat -f "%Sm" "$logfile" 2>/dev/null || echo "unknown")
-        echo "  - $(basename "$logfile") ($deploy_date)"
-    done || log_info "No recent deployment logs found"
+            local deploy_date
+            deploy_date=$(stat -c %y "$logfile" 2>/dev/null || stat -f "%Sm" "$logfile" 2>/dev/null || echo "unknown")
+            echo "  - $(basename "$logfile") ($deploy_date)"
+        done || log_info "No recent deployment logs found"
 }
 
 # Usage function
@@ -309,69 +223,3 @@ Examples:
   $0 status             # Check current status
   $0 logs --tail        # Show recent logs
 
-Environment Variables:
-  DEPLOYMENT_ENV       - Override environment (production, staging, development)
-  SKIP_HEALTH_CHECK    - Skip health checks (not recommended)
-  MAX_DEPLOYMENT_TIME  - Override deployment timeout (default: 600s)
-
-EOF
-}
-
-# Show recent deployment logs
-show_logs() {
-    local tail_mode="${1:-false}"
-
-    log_header "📋 DEPLOYMENT LOGS"
-
-    if [[ "$tail_mode" == "--tail" ]]; then
-        local latest_log
-        latest_log=$(find "${APP_DIR}/logs" -name "deployment_*.log" -type f | sort -r | head -1)
-
-        if [[ -n "$latest_log" ]]; then
-            log_info "Tailing latest deployment log: $(basename "$latest_log")"
-            tail -f "$latest_log"
-        else
-            log_error "No deployment logs found"
-            exit 1
-        fi
-    else
-        find "${APP_DIR}/logs" -name "deployment_*.log" -mtime -7 2>/dev/null | \
-            sort -r | head -10 | while read -r logfile; do
-            echo -e "${BLUE}📄 $(basename "$logfile")${NC}"
-            echo "   Last modified: $(stat -c %y "$logfile" 2>/dev/null || stat -f "%Sm" "$logfile" 2>/dev/null)"
-            echo "   Size: $(ls -lh "$logfile" | awk '{print $5}')"
-            echo
-        done || log_info "No recent deployment logs found"
-    fi
-}
-
-# Parse command line arguments
-case "${1:-deploy}" in
-    "deploy")
-        main_deployment
-        ;;
-    "quick")
-        quick_deployment
-        ;;
-    "rollback")
-        "${SCRIPT_DIR}/rollback.sh" "${2:-previous}"
-        ;;
-    "status")
-        check_status
-        ;;
-    "health")
-        "${SCRIPT_DIR}/health-check.sh" "${2:---full}"
-        ;;
-    "logs")
-        show_logs "${2:-}"
-        ;;
-    "help"|"-h"|"--help")
-        show_usage
-        exit 0
-        ;;
-    *)
-        log_error "Unknown command: $1"
-        show_usage
-        exit 1
-        ;;
-esac
