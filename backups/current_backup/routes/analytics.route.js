@@ -1,0 +1,27 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const revenue_controller_1 = require("../controllers/OrderControllers/revenue.controller");
+const express_1 = require("express");
+const AsyncHandler_1 = require("../middleware/AsyncHandler");
+const ordermanagement_server_1 = require("../services/OrderManagement/ordermanagement.server");
+const revenueanalytics_server_1 = require("../services/OrderManagement/revenueanalytics.server");
+const ordervolume_controller_1 = require("../controllers/OrderControllers/ordervolume.controller");
+const OrderVolumeAnalytics_server_1 = require("../services/OrderManagement/OrderVolumeAnalytics.server");
+const advancedanalytics_controller_1 = require("../controllers/OrderControllers/advancedanalytics.controller");
+const advancedanalytics_server_1 = require("../services/OrderManagement/advancedanalytics.server");
+const orderManagementServer = new ordermanagement_server_1.OrderManagementService();
+const orderVolumeAnalyticsServer = new OrderVolumeAnalytics_server_1.OrderVolumeAnalyticsService(orderManagementServer);
+const revenueAnalyticsServer = new revenueanalytics_server_1.RevenueAnalyticsService(orderManagementServer);
+const advancedanalyticsServer = new advancedanalytics_server_1.AdvancedAnalyticsService(orderVolumeAnalyticsServer, revenueAnalyticsServer, orderManagementServer);
+const revenueController = new revenue_controller_1.RevenueController(revenueAnalyticsServer);
+const ordervolumeController = new ordervolume_controller_1.OrderVolumeController(orderVolumeAnalyticsServer);
+const advancedanalyticsController = new advancedanalytics_controller_1.AdvancedAnalyticsController(advancedanalyticsServer);
+const route = (0, express_1.Router)();
+exports.default = route;
+route.get('/total-revenue', (0, AsyncHandler_1.asynchandler)(revenueController.getTotalRevenue.bind(revenueController)));
+route.get('/revenue-by-category', (0, AsyncHandler_1.asynchandler)(revenueController.getRevenueByCategory.bind(revenueController)));
+route.get('/total-orders', (0, AsyncHandler_1.asynchandler)(ordervolumeController.gettotalOrder.bind(ordervolumeController)));
+route.get('/orders-by-category', (0, AsyncHandler_1.asynchandler)(ordervolumeController.getOrderCountsByCategory.bind(ordervolumeController)));
+route.get('/average-order-value', (0, AsyncHandler_1.asynchandler)(advancedanalyticsController.getAverageOrderValue.bind(advancedanalyticsController)));
+route.get('/price-range-distribution', (0, AsyncHandler_1.asynchandler)(advancedanalyticsController.getPriceRangeDistribution.bind(advancedanalyticsController)));
+//# sourceMappingURL=analytics.route.js.map
