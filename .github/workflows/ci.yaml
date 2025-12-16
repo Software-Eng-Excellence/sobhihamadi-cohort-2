@@ -113,6 +113,15 @@ jobs:
           overwrite_files: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script:
+            ~/sobhihamadi-cohort-2/scripts/deploy-orchestrator.sh
+            
 
 
 
