@@ -113,13 +113,20 @@ jobs:
           overwrite_files: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  Deploy-App:        
+    needs: [build, test, lint]
+    if : github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    steps:
       - name: Deploy via SSH
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
-          script:
+          script: |
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh
             ~/sobhihamadi-cohort-2/scripts/deploy-orchestrator.sh
             
 
