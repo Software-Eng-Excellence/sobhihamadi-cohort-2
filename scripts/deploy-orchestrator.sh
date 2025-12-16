@@ -124,7 +124,7 @@ main_deployment() {
 
     step_exit_code=$(run_step "Post-deployment hooks" "${SCRIPT_DIR}/post-deploy-hook.sh" false)
     if [[ $step_exit_code -ne 0 ]]; then
-        exit $step_exit_code
+    log_warn "Post-deployment hook exited ${step_exit_code} (non-fatal)"
     fi
 
     # Final success message
