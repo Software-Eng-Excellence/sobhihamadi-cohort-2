@@ -314,8 +314,8 @@ check_application_endpoints() {
 
     # Test a few more endpoints if they exist
     local endpoints=(
-        "http://localhost:3000/api"
-        "http://localhost:3000/api/auth"
+        "http://localhost:3000/health"
+        "http://localhost:3000/health/db"
     )
 
     for endpoint in "${endpoints[@]}"; do
