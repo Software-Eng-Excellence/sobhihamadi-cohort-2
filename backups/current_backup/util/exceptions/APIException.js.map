@@ -1,1 +1,0 @@
-{"version":3,"file":"APIException.js","sourceRoot":"","sources":["../../../src/util/exceptions/APIException.ts"],"names":[],"mappings":";;;AAEA,MAAa,YAAa,SAAQ,KAAK;IAEnC,YAAY,OAAe,EAAE,UAAkB;QAC3C,KAAK,CAAC,OAAO,CAAC,CAAC;QACf,IAAI,CAAC,IAAI,GAAG,cAAc,CAAC;QAE3B,IAAI,CAAC,OAAO,GAAC,OAAO,CAAC;QACrB,IAAI,CAAC,UAAU,GAAG,UAAU,CAAC;IACjC,CAAC;CAGA;AAXL,oCAWK"}
